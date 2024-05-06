@@ -1,3 +1,5 @@
+import sha256 from "sha256";
+
 class Blockchain {
   constructor() {
     this.chain = [];
@@ -32,6 +34,24 @@ class Blockchain {
     this.pendingTransactions.push(newTransaction);
 
     return this.getLastBlock()["index"] + 1;
+  }
+
+  hashBlock(previousBlockHash, currentBlockData, nonce){
+    const dataAsString = previousBlockHash + nonce.toString() + JSON.stringify(currentBlockData);
+    const hash = sha256(dataAsString);
+    return hash;
+  }
+
+  proofOfWork(previousBlockHash, currentBlockData){
+    let nonce = 0;
+    let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+    while (hash.substring(0, 4) !== "0000"){
+      nonce++;
+      hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+      console.log(hash);
+    }
+    return nonce;
+
   }
 }
 

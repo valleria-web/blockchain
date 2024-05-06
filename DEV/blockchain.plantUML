@@ -1,0 +1,13 @@
+@startuml b1;
+
+class Blockchain {
+    - chain: array
+    - pendingTransactions: array
+
+    + Blockchain()
+    + createNewBlock(nonce, previousBlockHash, hash): object
+    + getLastBlock(): object
+    + createNewTransaction(amount, sender, recipient): integer
+}
+
+@enduml

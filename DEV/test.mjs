@@ -3,7 +3,23 @@
 import Blockchain from './blockchain.mjs';
 
 const blockchain = new Blockchain();
-blockchain.createNewBlock(2355, "HSGGGIWEA", "YUTSSSPAWW");
-blockchain.createNewBlock(4521, "SFDFSWEA", "SDFSFSPAWW");
-blockchain.createNewBlock(7854, "HTTNND77IWEA", "YDDFWWWQXDCV");
-console.log(blockchain);
+
+const previousBlockHash = "HISDVFAGHUIVIUBRLIUERBB";
+const currentBlockData = [
+    {
+        amount: 10,
+        sender: "Alexbc1",
+        recipient: "Bobbc2"
+    },
+    {
+        amount: 78,
+        sender: "Carlbc3",
+        recipient: "Davidbc4"
+    }
+];
+
+console.log(blockchain.proofOfWork(previousBlockHash, currentBlockData));
+
+
+
+
