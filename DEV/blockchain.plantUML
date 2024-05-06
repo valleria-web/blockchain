@@ -1,4 +1,4 @@
-@startuml b1;
+@startuml b,
 
 class Blockchain {
     - chain: array
@@ -8,6 +8,9 @@ class Blockchain {
     + createNewBlock(nonce, previousBlockHash, hash): object
     + getLastBlock(): object
     + createNewTransaction(amount, sender, recipient): integer
+    + hashBlock(previousBlockHash, currentBlockData, nonce): string
+    + proofOfWork(previousBlockHash, currentBlockData): integer
 }
 
 @enduml
+
