@@ -4,7 +4,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch dev -e mjs dev/api.mjs"
+    "node_1": "nodemon --watch dev -e mjs dev/networkNode.mjs 3001 http://localhost:3001",
+    "node_2": "nodemon --watch dev -e mjs dev/networkNode.mjs 3002 http://localhost:3002",
+    "node_3": "nodemon --watch dev -e mjs dev/networkNode.mjs 3003 http://localhost:3003",
+    "node_4": "nodemon --watch dev -e mjs dev/networkNode.mjs 3004 http://localhost:3004",
+    "node_5": "nodemon --watch dev -e mjs dev/networkNode.mjs 3005 http://localhost:3005"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +17,7 @@
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "nodemon": "^3.1.0",
+    "request-promise": "^4.2.6",
     "sha256": "^0.2.0",
     "uuid": "^9.0.1"
   }
