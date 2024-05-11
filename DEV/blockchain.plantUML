@@ -1,16 +1,31 @@
-@startuml b,
+@startuml a,
 
 class Blockchain {
-    - chain: array
-    - pendingTransactions: array
-
-    + Blockchain()
-    + createNewBlock(nonce, previousBlockHash, hash): object
-    + getLastBlock(): object
-    + createNewTransaction(amount, sender, recipient): integer
-    + hashBlock(previousBlockHash, currentBlockData, nonce): string
-    + proofOfWork(previousBlockHash, currentBlockData): integer
+  -chain: array
+  -pendingTransactions: array
+  -currentNodeUrl: string
+  -networkNodes: array
+  +constructor()
+  +createNewBlock(nonce: number, previousBlockHash: string, hash: string): object
+  +getLastBlock(): object
+  +createNewTransaction(amount: number, sender: string, recipient: string): object
+  +addTransactionToPendingTransactions(transactionObj: object): number
+  +hashBlock(previousBlockHash: string, currentBlockData: object, nonce: number): string
+  +proofOfWork(previousBlockHash: string, currentBlockData: object): number
 }
+
+Blockchain *-- "*" Blockchain
+
+Blockchain "1" -- "*" Transaction
+
+class Transaction {
+  -amount: number
+  -sender: string
+  -recipient: string
+  -transactionId: string
+}
+
+Transaction -- Blockchain : "1" belongs to
 
 @enduml
 
