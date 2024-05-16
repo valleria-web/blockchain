@@ -5,11 +5,15 @@ const currentNodeUrl = process.argv[3];
 
 class Blockchain {
   constructor() {
+    if (Blockchain.instance) {
+      return Blockchain.instance;
+    }
     this.chain = [];
     this.pendingTransactions = [];
     this.currentNodeUrl = currentNodeUrl;
     this.networkNodes = [];
     this.createNewBlock(0, "0", "0");
+    Blockchain.instance = this;
   }
 
   createNewBlock(nonce, previousBlockHash, hash) {

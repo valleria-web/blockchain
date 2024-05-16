@@ -1,31 +1,29 @@
-@startuml a,
+@startuml
 
 class Blockchain {
-  -chain: array
-  -pendingTransactions: array
-  -currentNodeUrl: string
-  -networkNodes: array
-  +constructor()
-  +createNewBlock(nonce: number, previousBlockHash: string, hash: string): object
-  +getLastBlock(): object
-  +createNewTransaction(amount: number, sender: string, recipient: string): object
-  +addTransactionToPendingTransactions(transactionObj: object): number
-  +hashBlock(previousBlockHash: string, currentBlockData: object, nonce: number): string
-  +proofOfWork(previousBlockHash: string, currentBlockData: object): number
+  - chain: array
+  - pendingTransactions: array
+  - currentNodeUrl: string
+  - networkNodes: array
+  + createNewBlock(nonce: number, previousBlockHash: string, hash: string): object
+  + getLastBlock(): object
+  + createNewTransaction(amount: number, sender: string, recipient: string): object
+  + addTransactionToPendingTransactions(transactionObj: object): number
+  + hashBlock(previousBlockHash: string, currentBlockData: object, nonce: number): string
+  + proofOfWork(previousBlockHash: string, currentBlockData: object): number
+  + mine(): void
 }
 
-Blockchain *-- "*" Blockchain
-
-Blockchain "1" -- "*" Transaction
-
-class Transaction {
-  -amount: number
-  -sender: string
-  -recipient: string
-  -transactionId: string
+class Node {
+  - currentNodeUrl: string
+  - networkNodes: array
+  + registerNode(newNodeUrl: string): void
+  + registerNodesBulk(allNetworkNodes: array): void
+  + broadcastTransaction(newTransaction: object): Promise<void>
+  + broadcastNewBlock(newBlock: object): Promise<void>
 }
 
-Transaction -- Blockchain : "1" belongs to
+Blockchain "1" --> "0..*" Node
 
 @enduml
 

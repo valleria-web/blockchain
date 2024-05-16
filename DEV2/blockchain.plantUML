@@ -1,0 +1,41 @@
+@startuml
+
+class Blockchain {
+    - chain: array
+    - pendingTransactions: array
+    - networkNodes: array
+    + createNewBlock(nonce: number, previousBlockHash: string, hash: string): object
+    + addNewBlock(newBlock: object): object
+    + getLastBlock(): object
+    + addTransactionToPendingTransactions(newTransaction: object): number
+    + mine(): object
+}
+
+class Node {
+    - currentNodeId: string
+    - blockchain: Blockchain
+    - networkNodes: array
+    - transactions: array
+    + registerNode()
+    + addTransaction(newTransaction: object): array
+}
+
+class Transaction {
+    - transactionId: string
+    - amount: number
+    - sender: string
+    - recipient: string
+    + creatAndBroadCastTransaction(): string
+}
+
+class Miner {
+    + mineNewBlock(previousBlockHash: string, currentBlockData: object): object
+    + hashBlock(previousBlockHash: string, currentBlockData: object, nonce: number): string
+}
+
+Blockchain "1" --> "*" Node
+Blockchain "1" --> "*" Transaction
+Blockchain "1" o-- Miner
+
+@enduml
+
