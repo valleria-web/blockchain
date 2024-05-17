@@ -1,6 +1,5 @@
-import sha256 from "sha256";
 import { randomUUID } from "crypto";
-import Miner from "./miner.mjs"
+import Node from "./node.mjs";
 
 class Blockchain {
   constructor() {
@@ -8,38 +7,50 @@ class Blockchain {
       return Blockchain.instance;
     }
     this.chain = [];
-    this.pendingTransactions = [];
     this.networkNodes = [];
-    this.createGenesisBlock();
+    this.node = new Node(this);
+    this.createGenesisTransaction();
     Blockchain.instance = this;
   }
 
-  
-  createGenesisBlock() {
-    const newBlock = {
-      index: 1,
-      timestamp: Date.now(),
-      transactions: [],
-      nonce: 0,
-      hash: "0",
-      previousBlockHash: "0",
-    };
-    this.addNewBlock(newBlock);
-    return newBlock;
+  getBlockchain() {
+    const blockchainData = [];
+    this.chain.forEach((block) => {
+      blockchainData.push({
+        index: block.index,
+        timestamp: block.timestamp,
+        transactions: block.transactions,
+        previousBlockHash: block.previousBlockHash,
+        hash: block.hash,
+        nonce: block.nonce,
+      });
+    });
+    return blockchainData;
   }
 
-  addNewBlock(newBlock) {
-    this.chain.push(newBlock);
-    return newBlock;
+  getAllTransactions() {
+    const transactions = [];
+    this.chain.forEach(block => {
+      transactions.push(...block.transactions);
+    });
+    return transactions;
+  }
+
+  createGenesisTransaction() {
+    const rewardAmount = 50;
+    const genesisTransaction = {
+      transactionId: randomUUID().split("_").join(""),
+      amount: rewardAmount,
+      sender: "0",
+      recipient: this.node.wallet.publicKey,
+    };
+
+    this.node.receiveTransaction(genesisTransaction);
+    this.node.mineGenesisTransaction();
   }
 
   getLastBlock() {
     return this.chain[this.chain.length - 1];
-  }
-
-  addTransactionToPendingTransactions(newTransaction) {
-    this.pendingTransactions.push(newTransaction);
-    return this.getLastBlock()["index"] + 1;
   }
 }
 

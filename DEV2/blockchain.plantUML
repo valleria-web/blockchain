@@ -1,41 +1,60 @@
 @startuml
+!define RECTANGLE class
 
-class Blockchain {
-    - chain: array
-    - pendingTransactions: array
-    - networkNodes: array
-    + createNewBlock(nonce: number, previousBlockHash: string, hash: string): object
-    + addNewBlock(newBlock: object): object
-    + getLastBlock(): object
-    + addTransactionToPendingTransactions(newTransaction: object): number
-    + mine(): object
+RECTANGLE Blockchain {
+  +chain: Array<Block>
+  +networkNodes: Array<String>
+  +node: Node
+  +getBlockchain(): Array<Object>
+  +createGenesisBlock(): Block
+  +getLastBlock(): Block
+  __
+  -constructor()
 }
 
-class Node {
-    - currentNodeId: string
-    - blockchain: Blockchain
-    - networkNodes: array
-    - transactions: array
-    + registerNode()
-    + addTransaction(newTransaction: object): array
+RECTANGLE Node {
+  +currentNodeId: String
+  +blockchain: Blockchain
+  +networkNodes: Array<String>
+  +pendingTransactions: Array<Transaction>
+  +miner: Miner
+  +receiveTransaction(transaction: Transaction)
+  +addTransactionToPendingTransactions(newTransaction: Transaction): Number
+  +minePendingTransactions()
+  +getLastBlock(): Block
+  +registerNode()
+  __
+  -constructor(blockchain: Blockchain)
+}
+
+RECTANGLE Miner {
+  +createNewBlock(nonce: Number, previousBlockHash: String, hash: String): Block
+  +proofOfWork(previousBlockHash: String, currentBlockData: Object): Number
+  +hashBlock(previousBlockHash: String, currentBlockData: Object, nonce: Number): String
+  __
+  -constructor(node: Node)
+}
+
+RECTANGLE Wallet {
+  +transactionId: String
+  +amount: Number
+  +sender: String
+  +recipient: String
+  +createAndBroadCastTransaction()
+  __
+  -constructor(node: Node, amount: Number, sender: String, recipient: String)
 }
 
 class Transaction {
-    - transactionId: string
-    - amount: number
-    - sender: string
-    - recipient: string
-    + creatAndBroadCastTransaction(): string
+  +transactionId: String
+  +amount: Number
+  +sender: String
+  +recipient: String
 }
 
-class Miner {
-    + mineNewBlock(previousBlockHash: string, currentBlockData: object): object
-    + hashBlock(previousBlockHash: string, currentBlockData: object, nonce: number): string
-}
-
-Blockchain "1" --> "*" Node
-Blockchain "1" --> "*" Transaction
-Blockchain "1" o-- Miner
+Blockchain --> Node : has a
+Node --> Miner : has a
+Wallet --> Node : sends transactions to
+Node --> Blockchain : accesses
 
 @enduml
-

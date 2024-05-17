@@ -1,62 +1,85 @@
+import sha256 from "sha256";
 import { randomUUID } from "crypto";
+import Wallet from "./wallet.mjs";
 
 class Node {
   constructor(blockchain) {
-    this.currentNodeId = randomUUID().split("_").join("");
     this.blockchain = blockchain;
-    this.networkNodes = [];
-    this.transaction = [];
+    this.currentNodeId = randomUUID().split("_").join("");
+    this.pendingTransactions = [];
+    this.wallet = new Wallet(this);
   }
 
-  registerNode() {
-    if (!this.blockchain.networkNodes.includes(this.currentNodeId)) {
-      this.networkNodes.push(this.currentNodeId);
-      this.blockchain.networkNodes.push(this.currentNodeId);
+  receiveTransaction(transaction) {
+    this.pendingTransactions.push(transaction);
+  }
+
+  mineGenesisTransaction() {
+    const previousBlockHash = "0";
+    const currentBlockData = {
+      transactions: this.pendingTransactions,
+      index: 1,
+    };
+
+    const nonce = this.proofOfWork(previousBlockHash, currentBlockData);
+    const hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+
+    const newBlock = this.createNewBlock(nonce, previousBlockHash, hash);
+    this.pendingTransactions = [];
+
+    return newBlock;
+  }
+
+  minePendingTransactions() {
+    const lastBlock = this.blockchain.getLastBlock();
+    const previousBlockHash = lastBlock.hash;
+    const currentBlockData = {
+      transactions: this.pendingTransactions,
+      index: lastBlock.index + 1,
+    };
+
+    const nonce = this.proofOfWork(previousBlockHash, currentBlockData);
+    const hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+
+    const newBlock = this.createNewBlock(nonce, previousBlockHash, hash);
+    this.pendingTransactions = [];
+
+    return newBlock;
+  }
+
+  createNewBlock(nonce, previousBlockHash, hash) {
+    const newBlock = {
+      index: this.blockchain.chain.length + 1,
+      timestamp: Date.now(),
+      transactions: [...this.pendingTransactions],
+      nonce: nonce,
+      hash: hash,
+      previousBlockHash: previousBlockHash,
+    };
+    this.blockchain.chain.push(newBlock);
+
+    return newBlock;
+  }
+
+  proofOfWork(previousBlockHash, currentBlockData) {
+    let nonce = 0;
+    let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+    while (hash.substring(0, 4) !== "0000") {
+      nonce++;
+      hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
     }
+    return nonce;
   }
 
-  addTransaction(newTransaction){
-    this.transaction.push(newTransaction);
-    return this.transaction;
+  hashBlock(previousBlockHash, currentBlockData, nonce) {
+    const dataAsString =
+      previousBlockHash + nonce.toString() + JSON.stringify(currentBlockData);
+    const hash = sha256(dataAsString);
+
+    console.log(hash);
+    
+    return hash;
   }
 }
 
 export default Node;
-
-
-//  registerNodesBulk(allNetworkNodes) {
-//    allNetworkNodes.forEach(networkNodeId => {
-//      if (!this.networkNodes.includes(networkNodeId) && networkNodeId !== this.currentNodeUrl) {
-//        this.networkNodes.push(networkNodeId);
-//      }
-//    });
-//  }//
-
-//  broadcastTransaction(newTransaction) {
-//    const requestPromises = this.networkNodes.map(networkNodeId => {
-//      const requestOptions = {
-//        uri: networkNodeId + "/transaction",
-//        method: "POST",
-//        body: newTransaction,
-//        json: true,
-//      };
-//      return requestPromise(requestOptions);
-//    });//
-
-//    return Promise.all(requestPromises);
-//  }//
-
-//  broadcastNewBlock(newBlock) {
-//    const requestPromises = this.networkNodes.map(networkNodeId => {
-//      const requestOptions = {
-//        uri: networkNodeId + "/receive-new-block",
-//        method: "POST",
-//        body: { newBlock },
-//        json: true,
-//      };
-//      return requestPromise(requestOptions);
-//    });//
-
-//    return Promise.all(requestPromises);
-//  }
-
