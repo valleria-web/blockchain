@@ -7,20 +7,34 @@ class Wallet {
     this.balance = 0;
   }
 
-  createAndBroadcastTransaction(amount, recipient) {
+  createAndBroadcastTransaction(amount, recipientWallet) {
     const transactionId = randomUUID().split("_").join("");
     const transaction = {
       transactionId: transactionId,
       amount: amount,
       sender: this.publicKey,
-      recipient: recipient,
+      recipient: recipientWallet.publicKey,
     };
+
     console.log(`Transaction created:`, transaction);
+
+    // Update the balance of the recipient wallet
+    recipientWallet.balance += amount;
+
     this.node.receiveTransaction(transaction);
   }
 
   getBalance() {
-    // Implement balance calculation
+    return this.balance;
+  }
+
+  updateBalance(sender, recipient, amount) {
+    if (this.publicKey === sender) {
+      this.balance -= amount;
+    }
+    if (this.publicKey === recipient) {
+      this.balance += amount;
+    }
   }
 }
 

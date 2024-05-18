@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
 import Node from "./node.mjs";
+import { BADFLAGS } from "dns";
 
 class Blockchain {
   constructor() {
@@ -44,6 +45,8 @@ class Blockchain {
       sender: "0",
       recipient: this.node.wallet.publicKey,
     };
+
+    this.node.wallet.updateBalance("0", this.node.wallet.publicKey, rewardAmount);
 
     this.node.receiveTransaction(genesisTransaction);
     this.node.mineGenesisTransaction();
