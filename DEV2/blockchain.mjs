@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import Node from "./node.mjs";
-import { BADFLAGS } from "dns";
+import Wallet from "./wallet.mjs";
 
 class Blockchain {
   constructor() {
@@ -10,6 +10,7 @@ class Blockchain {
     this.chain = [];
     this.networkNodes = [];
     this.node = new Node(this);
+    this.wallet = new Wallet(this.node);
     this.createGenesisTransaction();
     Blockchain.instance = this;
   }
@@ -43,10 +44,12 @@ class Blockchain {
       transactionId: randomUUID().split("_").join(""),
       amount: rewardAmount,
       sender: "0",
-      recipient: this.node.wallet.publicKey,
+      recipient: this.wallet.publicKey, 
     };
 
-    this.node.wallet.updateBalance("0", this.node.wallet.publicKey, rewardAmount);
+    this.wallet.updateBalance("0", this.wallet.publicKey, rewardAmount);
+
+    this.wallet.createAndBroadcastTransaction(rewardAmount, this.wallet);
 
     this.node.receiveTransaction(genesisTransaction);
     this.node.mineGenesisTransaction();

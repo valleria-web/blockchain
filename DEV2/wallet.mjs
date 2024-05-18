@@ -16,12 +16,11 @@ class Wallet {
       recipient: recipientWallet.publicKey,
     };
 
+    this.node.receiveTransaction(transaction);
+
     console.log(`Transaction created:`, transaction);
 
-    // Update the balance of the recipient wallet
     recipientWallet.balance += amount;
-
-    this.node.receiveTransaction(transaction);
   }
 
   getBalance() {
@@ -39,3 +38,4 @@ class Wallet {
 }
 
 export default Wallet;
+

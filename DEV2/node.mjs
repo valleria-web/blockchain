@@ -1,13 +1,16 @@
 import sha256 from "sha256";
 import { randomUUID } from "crypto";
-import Wallet from "./wallet.mjs";
 
 class Node {
   constructor(blockchain) {
     this.blockchain = blockchain;
     this.currentNodeId = randomUUID().split("_").join("");
     this.pendingTransactions = [];
-    this.wallet = new Wallet(this);
+    this.wallets = [];
+  }
+
+  addWallet(wallet) {
+    this.wallets.push(wallet);
   }
 
   receiveTransaction(transaction) {
@@ -77,7 +80,7 @@ class Node {
     const hash = sha256(dataAsString);
 
     console.log(hash);
-    
+
     return hash;
   }
 }
