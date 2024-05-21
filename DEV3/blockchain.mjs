@@ -1,17 +1,9 @@
-import { randomUUID } from "crypto";
-import Node from "./node.mjs";
-
-
 class Blockchain {
   constructor() {
     if (Blockchain.instance) {
       return Blockchain.instance;
     }
     this.chain = [];
-    this.networkNodes = [];
-    this.node = new Node(this);
-    this.createGenesisTransaction();
-    Blockchain.instance = this;
   }
 
   getBlockchain() {
@@ -37,22 +29,13 @@ class Blockchain {
     return transactions;
   }
 
-//  createGenesisTransaction() {
-//    const rewardAmount = 50;
-//    const genesisTransaction = {
-//      transactionId: randomUUID().split("_").join(""),
-//      amount: rewardAmount,
-//      sender: "0",
-//      recipient: "0" 
-//    };//
-
-//    this.node.receiveTransaction(genesisTransaction);
-//    this.node.mineGenesisTransaction();
-//  }
-
   getLastBlock() {
     return this.chain[this.chain.length - 1];
   }
 }
 
 export default Blockchain;
+
+const bitcoin = new Blockchain();
+
+bitcoin.getBlockchain();

@@ -5,7 +5,7 @@ class Node {
   constructor(blockchain) {
     this.blockchain = blockchain;
     this.currentNodeId = randomUUID().split("_").join("");
-    this.pendingTransactions = [];
+    this.attemptBlock = [];
     this.wallets = [];
   }
 
@@ -13,14 +13,18 @@ class Node {
     this.wallets.push(wallet);
   }
 
-  receiveTransaction(transaction) {
-    this.pendingTransactions.push(transaction);
+  getWallets(){
+    console.log(this.wallets)
+  }
+
+  receiveaAttemptBlock(block) {
+    this.attemptBlock.push(block);
   }
 
   mineGenesisTransaction() {
     const previousBlockHash = "0";
     const currentBlockData = {
-      transactions: this.pendingTransactions,
+      transactions: this.attemptBlock,
       index: 1,
     };
 
@@ -28,16 +32,16 @@ class Node {
     const hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
 
     const newBlock = this.createNewBlock(nonce, previousBlockHash, hash);
-    this.pendingTransactions = [];
+    this.attemptBlock = [];
 
     return newBlock;
   }
 
-  minePendingTransactions() {
+  mineAttemptBlock() {
     const lastBlock = this.blockchain.getLastBlock();
     const previousBlockHash = lastBlock.hash;
     const currentBlockData = {
-      transactions: this.pendingTransactions,
+      transactions: this.attemptBlock,
       index: lastBlock.index + 1,
     };
 
@@ -45,21 +49,7 @@ class Node {
     const hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
 
     const newBlock = this.createNewBlock(nonce, previousBlockHash, hash);
-    this.pendingTransactions = [];
-
-    return newBlock;
-  }
-
-  createNewBlock(nonce, previousBlockHash, hash) {
-    const newBlock = {
-      index: this.blockchain.chain.length + 1,
-      timestamp: Date.now(),
-      transactions: [...this.pendingTransactions],
-      nonce: nonce,
-      hash: hash,
-      previousBlockHash: previousBlockHash,
-    };
-    this.blockchain.chain.push(newBlock);
+    this.attemptBlock = [];
 
     return newBlock;
   }

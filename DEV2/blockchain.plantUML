@@ -1,60 +1,46 @@
 @startuml
-!define RECTANGLE class
 
-RECTANGLE Blockchain {
-  +chain: Array<Block>
-  +networkNodes: Array<String>
-  +node: Node
-  +getBlockchain(): Array<Object>
-  +createGenesisBlock(): Block
-  +getLastBlock(): Block
-  __
-  -constructor()
+package "Blockchain System" {
+  class Blockchain {
+    - chain: array
+    - networkNodes: array
+    - node: Node
+    + Blockchain()
+    + getBlockchain(): array
+    + getAllTransactions(): array
+    + createGenesisTransaction(): void
+    + getLastBlock(): object
+  }
+
+  class Node {
+    - blockchain: Blockchain
+    - currentNodeId: string
+    - pendingTransactions: array
+    - wallets: array
+    + Node(blockchain: Blockchain)
+    + addWallet(wallet: Wallet): void
+    + getWallets(): void
+    + receiveTransaction(transaction: object): void
+    + mineGenesisTransaction(): object
+    + minePendingTransactions(): object
+    + createNewBlock(nonce: int, previousBlockHash: string, hash: string): object
+    + proofOfWork(previousBlockHash: string, currentBlockData: object): int
+    + hashBlock(previousBlockHash: string, currentBlockData: object, nonce: int): string
+  }
+
+  class Wallet {
+    - node: Node
+    - publicKey: string
+    - balance: int
+    + Wallet(node: Node)
+    + createAndBroadcastTransaction(amount: int, recipientWallet: Wallet): void
+    + getBalance(): int
+    + updateBalance(sender: string, recipient: string, amount: int): void
+  }
+
+  Blockchain --> Node: has
+  Node --> Wallet: manages
+  Wallet --> Node: references
 }
-
-RECTANGLE Node {
-  +currentNodeId: String
-  +blockchain: Blockchain
-  +networkNodes: Array<String>
-  +pendingTransactions: Array<Transaction>
-  +miner: Miner
-  +receiveTransaction(transaction: Transaction)
-  +addTransactionToPendingTransactions(newTransaction: Transaction): Number
-  +minePendingTransactions()
-  +getLastBlock(): Block
-  +registerNode()
-  __
-  -constructor(blockchain: Blockchain)
-}
-
-RECTANGLE Miner {
-  +createNewBlock(nonce: Number, previousBlockHash: String, hash: String): Block
-  +proofOfWork(previousBlockHash: String, currentBlockData: Object): Number
-  +hashBlock(previousBlockHash: String, currentBlockData: Object, nonce: Number): String
-  __
-  -constructor(node: Node)
-}
-
-RECTANGLE Wallet {
-  +transactionId: String
-  +amount: Number
-  +sender: String
-  +recipient: String
-  +createAndBroadCastTransaction()
-  __
-  -constructor(node: Node, amount: Number, sender: String, recipient: String)
-}
-
-class Transaction {
-  +transactionId: String
-  +amount: Number
-  +sender: String
-  +recipient: String
-}
-
-Blockchain --> Node : has a
-Node --> Miner : has a
-Wallet --> Node : sends transactions to
-Node --> Blockchain : accesses
 
 @enduml

@@ -10,7 +10,10 @@ const wallet2 = new Wallet(node1);
 node1.addWallet(wallet1);
 node1.addWallet(wallet2);
 
-wallet1.createAndBroadcastTransaction(10, wallet1);
+node1.getWallets();
 
-console.log(wallet1.getBalance());
-console.log(wallet2.getBalance());
+wallet1.createAndBroadcastTransaction(10, wallet1);
+wallet1.createAndBroadcastTransaction(55, wallet1);
+
+//console.log(wallet1.getBalance());
+//console.log(wallet2.getBalance());
