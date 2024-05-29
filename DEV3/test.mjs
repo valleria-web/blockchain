@@ -1,16 +1,12 @@
-import Blockchain from "./blockchain.mjs";
 import Wallet from "./wallet.mjs";
-import WalletManager from "./walletManager.mjs";
 
-const bitcoin = new Blockchain();
-const walletManager = new WalletManager();
 const wallet1 = new Wallet();
 const wallet2 = new Wallet();
 
-walletManager.addAddresses([wallet1, wallet2]);
+console.log(wallet1.getBalance());
+console.log(wallet2.getBalance());
 
-wallet1.initiateTransaction(50, wallet2.publicKey, walletManager);
+wallet1.initiateTransaction(10, wallet2);
 
-console.log(walletManager.getAllAddresses());
-console.log(`Wallet1 Balance: ${wallet1.getBalance()}`);
-console.log(`Wallet2 Balance: ${wallet2.getBalance()}`);
+console.log(wallet1.getBalance()); 
+console.log(wallet2.getBalance());

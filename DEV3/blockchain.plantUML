@@ -1,0 +1,83 @@
+@startuml
+
+class Block {
+  - index: int
+  - timestamp: long
+  - transactions: List<Transaction>
+  - nonce: int
+  - hash: String
+  - previousBlockHash: String
+}
+
+class Blockchain {
+  - chain: List<Block>
+  - blockFound: boolean
+  - transactions: List<Transaction>
+  - mempool: Mempool
+  - events: Map<String, List<Function>>
+  - instance: Blockchain
+  + createGenesisBlock(): void
+  + addMiningRewardTransaction(minerId: String, rewardAmount: int): void
+  + isBlockFound(): boolean
+  + createNewBlock(nonce: int, previousBlockHash: String, hash: String, minerId: String): Block
+  + getLastBlock(): Block
+  + getBlockByIndex(index: int): Block
+  + getBlockchain(): List<Map<String, Object>>
+  + getAllTransactions(): List<Transaction>
+  + on(event: String, listener: Function): void
+  + emit(event: String, ...args: Object): void
+}
+
+class Mempool {
+  + addTransaction(transaction: Transaction): void
+}
+
+class Miner {
+  - mempool: Mempool
+  - blockchain: Blockchain
+  - minerId: String
+  - minerWallet: Wallet
+  - events: Map<String, List<Function>>
+  + getMinerWallet(): Wallet
+  + hashBlock(previousBlockHash: String, currentBlockData: List<Transaction>, nonce: int): String
+  + proofOfWork(previousBlockHash: String, currentBlockData: List<Transaction>): int
+  + mineBlock(): void
+  + addMiningRewardToBalance(rewardTransaction: Transaction): void
+  + isValidBlock(blockHash: String): boolean
+  + confirmTransactions(transactions: List<Transaction>): void
+  + on(event: String, listener: Function): void
+  + emit(event: String, ...args: Object): void
+}
+
+class Wallet {
+  - publicKey: string
+  - balance: number
+  + getBalance(): number
+  + updateBalance(transaction: Transaction): void
+  + initiateTransaction(amount: number, recipient: Wallet, mempool: Mempool): void
+}
+
+class Transaction {
+  - amount: number
+  - sender: string
+  - recipient: string
+  - isConfirmed: boolean
+  + createAndBroadcastTransaction(senderWallet: Wallet, recipientWallet: Wallet, mempool: Mempool): void
+  + confirmTransaction(): void
+}
+
+Blockchain --> Block : contains
+Blockchain --> Mempool : uses
+Blockchain --> Transaction : uses
+Blockchain --> Miner : notifies
+Mempool --> Transaction : contains
+Miner --> Blockchain : mines
+Miner --> Mempool : uses
+Miner --> Wallet : owns
+Wallet --> Transaction : Uses/Depends
+Wallet --> Mempool : uses
+
+@enduml
+
+
+

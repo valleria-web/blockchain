@@ -3,34 +3,37 @@ import Transaction from "./transaction.mjs";
 
 class Wallet {
   constructor() {
-    this.listOfPublicKey = [];
     this.publicKey = randomUUID().split("_").join("");
-    this.balance = 0;
+    this.balance = 100;
+  }
+
+  initiateTransaction(amount, recipientWallet) {
+    if (this.balance < amount) {
+      console.log("Insufficient funds");
+      return;
+    }
+
+    const transaction = new Transaction(amount, this.publicKey, recipientWallet.publicKey);
+    this.processTransaction(transaction, recipientWallet);
+
+    console.log(`Se ha enviado ${amount} fondos a la billetera con clave pública ${recipientWallet.publicKey}`);
+  }
+
+  processTransaction(transaction, recipientWallet) {
+    if (transaction.senderPublicKey === this.publicKey) {
+      this.balance -= transaction.amount;
+      recipientWallet.addBalance(transaction.amount);
+    }
+  }
+
+  addBalance(amount) {
+    this.balance += amount;
   }
 
   getBalance() {
     return this.balance;
   }
-
-  updateBalance(transaction) {
-    if (this.publicKey === transaction.sender) {
-      this.balance -= transaction.amount;
-    }
-    if (this.publicKey === transaction.recipient) {
-      this.balance += transaction.amount;
-    }
-  }
-
-  initiateTransaction(amount, recipientPublicKey, walletManager) {
-    const sender = this.publicKey;
-    const recipientWallet = walletManager.getWalletByPublicKey(recipientPublicKey);
-    if (!recipientWallet) {
-      console.log("Recipient wallet not found.");
-      return;
-    }
-    const transaction = new Transaction(amount, sender, recipientPublicKey);
-    transaction.createAndBroadcastTransaction(this, recipientWallet);
-  }
 }
 
 export default Wallet;
+
