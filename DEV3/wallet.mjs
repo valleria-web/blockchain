@@ -2,9 +2,10 @@ import { randomUUID } from "crypto";
 import Transaction from "./transaction.mjs";
 
 class Wallet {
-  constructor() {
+  constructor(mempool) {
     this.publicKey = randomUUID().split("_").join("");
     this.balance = 100;
+    this.mempool = mempool
   }
 
   initiateTransaction(amount, recipientWallet) {
@@ -14,7 +15,10 @@ class Wallet {
     }
 
     const transaction = new Transaction(amount, this.publicKey, recipientWallet.publicKey);
-    this.processTransaction(transaction, recipientWallet);
+    this.mempool.addTransaction(transaction);
+
+//    const transaction = new Transaction(amount, this.publicKey, recipientWallet.publicKey);
+//    this.processTransaction(transaction, recipientWallet);
 
     console.log(`Se ha enviado ${amount} fondos a la billetera con clave pública ${recipientWallet.publicKey}`);
   }
