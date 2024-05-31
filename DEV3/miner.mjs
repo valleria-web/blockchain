@@ -1,13 +1,12 @@
 import Wallet from "./wallet.mjs";
 import sha256 from "sha256";
 
-
 class Miner {
   constructor(mempool, blockchain, minerId) {
     this.mempool = mempool;
     this.blockchain = blockchain;
     this.minerId = minerId;
-    this.minerWallet = new Wallet();
+    this.minerWallet = new Wallet(mempool, blockchain);
   }
 
   getMinerWallet() {
@@ -44,12 +43,21 @@ class Miner {
 
     if (this.isValidBlock(blockHash)) {
       console.log(`${this.minerId} found a valid block!`);
+
       const newBlock = this.blockchain.createNewBlock(
         nonce,
         previousBlockHash,
         blockHash,
         this.minerId
       );
+
+      newBlock.transactions.forEach((transaction) => {
+        if (transaction.senderPublicKey === "0") {
+          transaction.recipientPublicKey = this.minerWallet.publicKey;
+        }
+      });
+
+      this.minerWallet.updateBalance();
 
       return newBlock;
     }

@@ -2,10 +2,12 @@ import { randomUUID } from "crypto";
 import Transaction from "./transaction.mjs";
 
 class Wallet {
-  constructor(mempool) {
+  constructor(mempool, blockchain) {
     this.publicKey = randomUUID().split("_").join("");
-    this.balance = 100;
+    this.balance = 0;
     this.mempool = mempool
+    this.blockchain = blockchain;
+    this.updateBalance(); 
   }
 
   initiateTransaction(amount, recipientWallet) {
@@ -17,24 +19,27 @@ class Wallet {
     const transaction = new Transaction(amount, this.publicKey, recipientWallet.publicKey);
     this.mempool.addTransaction(transaction);
 
-//    const transaction = new Transaction(amount, this.publicKey, recipientWallet.publicKey);
-//    this.processTransaction(transaction, recipientWallet);
-
     console.log(`Se ha enviado ${amount} fondos a la billetera con clave pública ${recipientWallet.publicKey}`);
   }
 
-  processTransaction(transaction, recipientWallet) {
-    if (transaction.senderPublicKey === this.publicKey) {
-      this.balance -= transaction.amount;
-      recipientWallet.addBalance(transaction.amount);
-    }
+  updateBalance() {
+    let balance = 0;
+    const allTransactions = this.blockchain.getAllTransactions();
+
+    allTransactions.forEach(transaction => {
+      if (transaction.recipientPublicKey === this.publicKey) {
+        balance += transaction.amount;
+      }
+      if (transaction.senderPublicKey === this.publicKey) {
+        balance -= transaction.amount;
+      }
+    });
+
+    this.balance = balance;
+    console.log(`Balance actualizado: ${this.balance}`);
   }
 
-  addBalance(amount) {
-    this.balance += amount;
-  }
-
-  getBalance() {
+  getBalance(){
     return this.balance;
   }
 }

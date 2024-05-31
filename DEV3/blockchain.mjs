@@ -25,9 +25,9 @@ class Blockchain {
     this.chain.push(genesisBlock);
   }
 
-  createCoinbaseTransaction(minerId) {
+  createCoinbaseTransaction() {
     const coinbase = 50;
-    const coinbaseTransaction = new Transaction(coinbase, "0", minerId);
+    const coinbaseTransaction = new Transaction(coinbase, "0", "0");
 
     this.mempool.addTransaction(coinbaseTransaction);
 
@@ -46,13 +46,6 @@ class Blockchain {
       previousBlockHash: previousBlockHash,
       minerId: minerId,
     };
-
-    const confirmedCoinbaseTransaction = newBlock.transactions.find(
-      (transaction) => transaction.sender === "0"
-    );
-    if (confirmedCoinbaseTransaction) {
-      confirmedCoinbaseTransaction.recipient = minerId;
-    }
 
     newBlock.transactions.forEach((transaction) => {
       transaction.isConfirmed = true;

@@ -46,9 +46,9 @@ class Miner {
 class Wallet {
   -publicKey : String
   -balance : int
-  +Wallet()
+  -mempool : Mempool
+  +Wallet(mempool : Mempool)
   +initiateTransaction(amount : int, recipientWallet : Wallet) : void
-  +processTransaction(transaction : Transaction, recipientWallet : Wallet) : void
   +addBalance(amount : int) : void
   +getBalance() : int
 }
@@ -68,9 +68,11 @@ Mempool "1" -- "*" Transaction : contains
 Miner --> "1" Mempool : uses
 Miner --> "1" Blockchain : uses
 Miner --> "1" Wallet : creates
+Wallet --> "1" Mempool : uses
 Wallet "1" -- "*" Transaction : initiates
 
 @enduml
+
 
 
 
