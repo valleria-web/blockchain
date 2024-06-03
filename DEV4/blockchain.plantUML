@@ -1,0 +1,80 @@
+@startuml
+
+!define Transaction Transaction
+!define Blockchain Blockchain
+!define Mempool Mempool
+!define Miner Miner
+!define Wallet Wallet
+
+class Blockchain {
+  -chain : List<Block>
+  -mempool : Mempool
+  -static instance : Blockchain
+  -Blockchain(mempool : Mempool)
+  +createGenesisBlock() : void
+  +createCoinbaseTransaction(minerId : String) : Transaction
+  +createNewBlock(nonce : int, previousBlockHash : String, hash : String, minerId : String) : Block
+  +confirmTransaction(transactionId : String) : void
+  +getLastBlock() : Block
+  +getBlockByIndex(index : int) : Block
+  +getBlockchain() : List<Block>
+  +getAllTransactions() : List<Transaction>
+}
+
+class Mempool {
+  -pendingTransactions : List<Transaction>
+  -static instance : Mempool
+  +Mempool()
+  +addTransaction(transaction : Transaction) : void
+  +removeConfirmedTransactions() : void
+  +getPendingTransactions() : List<Transaction>
+}
+
+class Miner {
+  -mempool : Mempool
+  -blockchain : Blockchain
+  -minerId : String
+  -minerWallet : Wallet
+  +Miner(mempool : Mempool, blockchain : Blockchain, minerId : String)
+  +getMinerWallet() : Wallet
+  +hashBlock(previousBlockHash : String, currentBlockData : List<Transaction>, nonce : int) : String
+  +proofOfWork(previousBlockHash : String, currentBlockData : List<Transaction>) : int
+  +mineBlock() : Block
+  +isValidBlock(blockHash : String) : boolean
+}
+
+class Wallet {
+  -publicKey : String
+  -balance : int
+  -mempool : Mempool
+  +Wallet(mempool : Mempool)
+  +initiateTransaction(amount : int, recipientWallet : Wallet) : void
+  +addBalance(amount : int) : void
+  +getBalance() : int
+}
+
+class Transaction {
+  -transactionId : String
+  -amount : int
+  -senderPublicKey : String
+  -recipientPublicKey : String
+  -isConfirmed : boolean
+  +Transaction(amount : int, senderPublicKey : String, recipientPublicKey : String)
+}
+
+Blockchain --> "1" Mempool : association
+Blockchain "1" -- "*" Transaction : contains
+Mempool "1" -- "*" Transaction : contains
+Miner --> "1" Mempool : uses
+Miner --> "1" Blockchain : uses
+Miner --> "1" Wallet : creates
+Wallet --> "1" Mempool : uses
+Wallet "1" -- "*" Transaction : initiates
+
+@enduml
+
+
+
+
+
+
