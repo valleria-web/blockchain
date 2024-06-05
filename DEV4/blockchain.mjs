@@ -1,5 +1,4 @@
 import Block from "./block.mjs";
-import Transaction from "./transaction.mjs";
 import Coin from "./coin.mjs";
 
 class Blockchain {
@@ -7,32 +6,16 @@ class Blockchain {
     if (Blockchain.instance) {
       return Blockchain.instance;
     }
-    this.chain = [];
     Blockchain.instance = this;
+    this.chain = [];
+    this.coin = new Coin("Bitcoin", "BTC", 100);
+    this.createGenesisBlock = this.createGenesisBlock.bind(this);
     this.createGenesisBlock();
-    this.coin = null;
-  }
-
-  rewardTransaction(){
-    if (!this.coin) {
-      this.coin = new Coin(100);
-    }
-
-    const reward = this.coin.mintCoin(1);
-
-    return reward;
   }
 
   createGenesisBlock() {
-    rewardTransaction();
-    const genesisTransaction = Transaction.createTransaction(reward, "0", "0");
-    const genesisBlock = Block.createBlock(
-      1,
-      "0",
-      "0",
-      "0",
-      genesisTransaction
-    );
+    const coinbaseTransaction = this.coin.mintCoinbase(50, "0");
+    const genesisBlock = Block.createBlock(1, "0", "0", "0", [coinbaseTransaction]);
     this.addBlock(genesisBlock);
     return genesisBlock;
   }
@@ -62,12 +45,23 @@ class Blockchain {
   getBlockchain() {
     return this.chain;
   }
+
+  viewTransactions() {
+    this.chain.forEach(block => {
+      console.log(`Transactions in Block ${block.index}:`);
+      block.transactions.forEach(transaction => {
+        console.log(transaction);
+      });
+    });
+  }
 }
 
 export default Blockchain;
 
 const blockchain = new Blockchain();
-console.log(blockchain.getBlockchain());
+console.log(blockchain);
+console.log(blockchain.viewTransactions());
+
 
 /*import Transaction from "./transaction.mjs";
 

@@ -1,30 +1,46 @@
 class Coin {
-  constructor(totalSupply) {
+  constructor(name, ticker, totalSupply) {
     if (Coin.instance) {
       return Coin.instance;
     }
+    this.name = name;
+    this.ticker = ticker;
     this.initialSupply = 0;
-    this.supply = this.initialSupply;
+    this.actualSupply = this.initialSupply;
     this.totalSupply = totalSupply;
     Coin.instance = this;
   }
 
-  mintCoin(amount) {
+  mintCoinbase(amount, recipient) {
     if (
       amount <= this.totalSupply &&
-      this.supply + amount <= this.totalSupply
+      this.actualSupply + amount <= this.totalSupply
     ) {
-      this.supply += amount;
+      this.actualSupply += amount;
       console.log(`${amount} coins created`);
-      return this.supply;
+      return this.actualSupply;
     } else {
       console.log(`Mint ${amount} coins succedd total supply, mint rejected`);
     }
     return 0;
   }
 
-  getSupply() {
-    return this.supply;
+  getCoin() {
+    return {
+      name: this.name,
+      ticker: this.ticker,
+      totalSupply: this.totalSupply,
+      initialSupply: this.initialSupply,
+      actualSupply: this.actualSupply,
+    };
+  }
+
+  getActualSupply() {
+    return this.actualSupply;
+  }
+
+  getTotalSupply() {
+    return this.totalSupply;
   }
 }
 export default Coin;
