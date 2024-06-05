@@ -1,4 +1,63 @@
-import Wallet from "./wallet.mjs";
+import sha256 from "sha256";
+
+class Miner {
+  constructor(blockchain, minerId) {
+    this.blockchain = blockchain;
+    this.minerId = minerId;
+  }
+
+  hashBlock(previousBlockHash, nonce) {
+    const dataAsString =
+      previousBlockHash + nonce.toString()
+    const hash = sha256(dataAsString);
+    //console.log(hash);
+    return hash;
+  }
+
+  proofOfWork(previousBlockHash) {
+    let nonce = 0;
+    let hash = "";
+    while (hash.substring(0, 4) !== "0000") {
+      hash = this.hashBlock(previousBlockHash, nonce);
+      nonce++;
+    }
+    return nonce - 1;
+  }
+
+  mineBlock(transactions) {
+    const lastBlock = this.blockchain.getLastBlock();
+    const previousBlockHash = lastBlock.hash;
+    const nonce = this.proofOfWork(previousBlockHash);
+    const blockHash = this.hashBlock(previousBlockHash, nonce);
+
+    const newIndex = lastBlock.index + 1;
+    const newBlock = {
+      index: newIndex,
+      timestamp: Date.now(),
+      nonce: nonce,
+      hash: blockHash,
+      previousBlockHash: previousBlockHash,
+      transactions: transactions,
+    };
+
+    if (this.isValidHash(blockHash)) {
+      console.log(`${this.minerId} found a valid nonce!`);
+      this.blockchain.addBlock(newBlock);
+      return newBlock;
+    } else {
+      console.log("Block rejected: Invalid nonce.");
+    }
+  }
+
+  isValidHash(blockHash) {
+    return blockHash.substring(0, 4) === "0000";
+  }
+}
+
+export default Miner;
+
+
+/*import Wallet from "./wallet.mjs";
 import sha256 from "sha256";
 
 class Miner {
@@ -68,4 +127,4 @@ class Miner {
   }
 }
 
-export default Miner;
+export default Miner;*/

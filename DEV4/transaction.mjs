@@ -1,12 +1,18 @@
 import { randomUUID } from "crypto";
 
 class Transaction {
-  constructor(amount, senderPublicKey, recipientPublicKey) {
+  constructor(amount, sender, recipient) {
     this.transactionId = randomUUID().split("_").join("");
     this.amount = amount;
-    this.senderPublicKey = senderPublicKey;
-    this.recipientPublicKey = recipientPublicKey;
+    this.senderPublicKey = sender;
+    this.recipientPublicKey = recipient;
     this.isConfirmed = false;
+  }
+
+  static createTransaction(amount, sender, recipient) {
+    const newTransaction = new Transaction(amount, sender, recipient);
+    console.log(`New Transaction created: ${JSON.stringify(newTransaction)}`);
+    return newTransaction;
   }
 }
 

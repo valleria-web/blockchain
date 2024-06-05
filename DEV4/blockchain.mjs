@@ -1,4 +1,75 @@
+import Block from "./block.mjs";
 import Transaction from "./transaction.mjs";
+import Coin from "./coin.mjs";
+
+class Blockchain {
+  constructor() {
+    if (Blockchain.instance) {
+      return Blockchain.instance;
+    }
+    this.chain = [];
+    Blockchain.instance = this;
+    this.createGenesisBlock();
+    this.coin = null;
+  }
+
+  rewardTransaction(){
+    if (!this.coin) {
+      this.coin = new Coin(100);
+    }
+
+    const reward = this.coin.mintCoin(1);
+
+    return reward;
+  }
+
+  createGenesisBlock() {
+    rewardTransaction();
+    const genesisTransaction = Transaction.createTransaction(reward, "0", "0");
+    const genesisBlock = Block.createBlock(
+      1,
+      "0",
+      "0",
+      "0",
+      genesisTransaction
+    );
+    this.addBlock(genesisBlock);
+    return genesisBlock;
+  }
+
+  addBlock(block) {
+    if (this.validateBlock(block)) {
+      this.chain.push(block);
+      console.log("New block added to the chain.");
+    } else {
+      console.log("Block rejected: Invalid index.");
+    }
+  }
+
+  validateBlock(block) {
+    const lastBlock = this.chain[this.chain.length - 1];
+    if (!lastBlock || block.index > lastBlock.index) {
+      return block.index === this.chain.length + 1;
+    } else {
+      return false;
+    }
+  }
+
+  getLastBlock() {
+    return this.chain[this.chain.length - 1];
+  }
+
+  getBlockchain() {
+    return this.chain;
+  }
+}
+
+export default Blockchain;
+
+const blockchain = new Blockchain();
+console.log(blockchain.getBlockchain());
+
+/*import Transaction from "./transaction.mjs";
 
 class Blockchain {
   constructor(mempool) {
@@ -104,4 +175,4 @@ class Blockchain {
   }
 }
 
-export default Blockchain;
+export default Blockchain;*/

@@ -1,4 +1,28 @@
-import Wallet from "./wallet.mjs";
+import Blockchain from "./blockchain.mjs";
+import Miner from "./miner.mjs";
+
+const blockchain = new Blockchain();
+const miner1 = new Miner(blockchain, "Miner1");
+
+miner1.mineBlock();
+
+console.log(blockchain);
+console.log(miner1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*import Wallet from "./wallet.mjs";
 import Mempool from "./mempool.mjs";
 import Miner from "./miner.mjs";
 import Blockchain from "./blockchain.mjs";
