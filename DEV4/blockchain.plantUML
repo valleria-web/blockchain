@@ -1,39 +1,62 @@
 @startuml
 
-class Blockchain {
-  -chain: Array
-  +createGenesisBlock(): Block
-  +addBlock(block: Block): void
-  +validateBlock(block: Block): boolean
-  +getLastBlock(): Block
-  +getBlockchain(): Array
+class Coin {
+    - name: string
+    - ticker: string
+    - initialSupply: int
+    - actualSupply: int
+    - totalSupply: int
+    + Coin(name: string, ticker: string, totalSupply: int)
+    + mintCoinbase(): int
+    + getCoin(): object
+    + getActualSupply(): int
+    + getTotalSupply(): int
 }
 
 class Block {
-  -index: int
-  -timestamp: Date
-  -nonce: string
-  -hash: string
-  -previousBlockHash: string
-  +createBlock(index: int, nonce: string, hash: string, previousBlockHash: string): Block
+    - index: int
+    - timestamp: int
+    - nonce: string
+    - hash: string
+    - previousBlockHash: string
+    - transactions: array
+    - coinbase: int
+    + createBlock(index: int, nonce: string, hash: string, previousBlockHash: string, transactions: array): Block
+    + addTransaction(transaction: object): void
+    + getTransactions(): array
 }
 
-class Miner {
-  -blockchain: Blockchain
-  -minerId: string
-  +hashBlock(previousBlockHash: string, nonce: string): string
-  +proofOfWork(previousBlockHash: string): int
-  +mineBlock(): Block
-  +isValidHash(blockHash: string): boolean
+class Blockchain {
+    - chain: array
+    - coin: Coin
+    + createGenesisBlock(): void
+    + addBlock(block: Block): void
+    + validateBlock(block: Block): boolean
+    + getLastBlock(): Block
+    + getBlockchain(): array
+    + viewTransactions(): void
+    + createGenesisBlock(): Block
 }
 
-Blockchain "1" *-- "0..*" Block : has
-Miner o-- Blockchain : association
+class Coin {
+    - name: string
+    - ticker: string
+    - initialSupply: int
+    - actualSupply: int
+    - totalSupply: int
+    - instance: Coin
+    + constructor(name: string, ticker: string, totalSupply: int)
+    + mintCoinbase(): int
+    + getCoin(): object
+    + getActualSupply(): int
+    + getTotalSupply(): int
+}
 
+
+Blockchain "1" *-- "n" Block : contains
+Blockchain "1" *-- "1"  Coin : contains
+Block "1" --> "n" Transaction : contains
+Transaction "1" --> "n" Coin: contains
 @enduml
-
-
-
-
 
 

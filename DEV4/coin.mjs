@@ -11,18 +11,19 @@ class Coin {
     Coin.instance = this;
   }
 
-  mintCoinbase(amount, recipient) {
+  mintCoinbase() {
+    const amount = 50;
     if (
       amount <= this.totalSupply &&
       this.actualSupply + amount <= this.totalSupply
     ) {
       this.actualSupply += amount;
       console.log(`${amount} coins created`);
-      return this.actualSupply;
+      return amount;
     } else {
-      console.log(`Mint ${amount} coins succedd total supply, mint rejected`);
+      console.log(`Mint ${amount} coins exceeded total supply, mint rejected`);
     }
-    return 0;
+    return null;
   }
 
   getCoin() {

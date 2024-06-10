@@ -1,16 +1,16 @@
 class Block {
-  constructor(index, nonce, hash, previousBlockHash, transactions) {
+  constructor(index, nonce, hash, previousBlockHash, transactions, coinbase) {
     this.index = index;
     this.timestamp = Date.now();
     this.nonce = nonce;
     this.hash = hash;
     this.previousBlockHash = previousBlockHash;
     this.transactions = transactions || [];
-
+    this.coinbase = coinbase;
   }
 
-  static createBlock(index, nonce, hash, previousBlockHash, transaction) {
-    return new Block(index, nonce, hash, previousBlockHash, transaction);
+  static createBlock(index, nonce, hash, previousBlockHash, transactions, coinbase) {
+    return new Block(index, nonce, hash, previousBlockHash, transactions, coinbase);
   }
 
   addTransaction(transaction) {
@@ -23,30 +23,3 @@ class Block {
 }
 
 export default Block;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*class Block {
-  constructor(index, timestamp, [{}], nonce, hash, previousBlockHash) {
-    this.index = index;
-    this.timestamp = timestamp;
-    this.transactions = [{}];
-    this.nonce = nonce;
-    this.hash = hash;
-    this.previousBlockHash = previousBlockHash;
-  }
-}
-
-
-export default Block;*/

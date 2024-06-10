@@ -9,7 +9,7 @@ class Transaction {
     this.isConfirmed = false;
   }
 
-  static createTransaction(amount, sender, recipient) {
+  createTransaction(amount, sender, recipient) {
     const newTransaction = new Transaction(amount, sender, recipient);
     console.log(`New Transaction created: ${JSON.stringify(newTransaction)}`);  
     return newTransaction;
@@ -17,3 +17,6 @@ class Transaction {
 }
 
 export default Transaction;
+
+const transaction1 = new Transaction(1, "0", "0");
+console.log(transaction1)
