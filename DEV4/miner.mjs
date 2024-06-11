@@ -2,9 +2,10 @@ import sha256 from "sha256";
 import Transaction from "./transaction.mjs";
 
 class Miner {
-  constructor(minerId, blockchain, wallet) {
+  constructor(minerId, blockchain, mempool, wallet) {
     this.minerId = minerId;
     this.blockchain = blockchain;
+    this.mempool = mempool;
     this.wallet = wallet;
   }
 
@@ -38,16 +39,23 @@ class Miner {
       nonce: nonce,
       hash: blockHash,
       previousBlockHash: previousBlockHash,
-      transactions: [],
+      transactions: this.mempool.getPendingTransactions(),
     };
 
     if (this.isValidHash(blockHash)) {
-      console.log(`${this.minerId} found a valid nonce!`);
+      console.log(`${this.minerId} found a valid nonce!`);    
+      this.confirmTransactions(newBlock.transactions); 
       this.blockchain.addBlock(newBlock);
-
+      this.mempool.removeConfirmedTransactions();
       return newBlock;
     } else {
       console.log("Block rejected: Invalid nonce.");
+    }
+  }
+
+  confirmTransactions(transactions) {
+    for (const transaction of transactions) {
+      transaction.isConfirmed = true;
     }
   }
 

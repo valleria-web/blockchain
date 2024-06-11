@@ -1,8 +1,8 @@
 import Block from "./block.mjs";
 import Coin from "./coin.mjs";
-import Mempool from "./mempool.mjs";
 import Transaction from "./transaction.mjs";
 import Wallet from "./wallet.mjs";
+import Mempool from "./mempool.mjs";
 
 class Blockchain {
   constructor() {
@@ -10,30 +10,33 @@ class Blockchain {
       return Blockchain.instance;
     }
     Blockchain.instance = this;
-    this.coin =  new Coin("Bitcoin", "BTC", 100);
+    this.coin = new Coin("Bitcoin", "BTC", 100);
     this.chain = [];
+    this.genesisWallet = null;
     this.mempool = new Mempool();
-    this.genesisWallet = this.createGenesisWallet();   
     this.createGenesisBlock();
   }
 
-  createGenesisWallet(){
-    const wallet = new Wallet(this.mempool, this);
-    console.log(wallet);
-    return wallet;
-
+  createGenesisBlock() {
+    const coinbase = this.coin.mintCoinbase();
+    this.genesisWallet = new Wallet(this.mempool, this);
+    const rewardTransaction = new Transaction(
+      coinbase,
+      "0",
+      this.genesisWallet.publicKey
+    );
+    const genesisBlock = Block.createBlock(1, "0", "0", "0", [
+      rewardTransaction,
+    ]);
+    this.addBlock(genesisBlock);
+    this.confirmTransactions([rewardTransaction]);
+    this.genesisWallet.updateBalance(); 
   }
 
-  createGenesisTransaction(){
-    const coinbase = this.coin.mintCoinbase()
-    const transaction = new Transaction();
-    return transaction.createTransaction(coinbase, "0",  this.genesisWallet.publicKey);
-  }    
-
-  createGenesisBlock() {
-    const rewardTransaction = this.createGenesisTransaction();
-    const genesisBlock = Block.createBlock(1, "0", "0", "0", [rewardTransaction]);
-    this.addBlock(genesisBlock);
+  confirmTransactions(transactions) {
+    for (const transaction of transactions) {
+      transaction.isConfirmed = true;
+    }
   }
 
   addBlock(block) {
@@ -63,9 +66,9 @@ class Blockchain {
   }
 
   viewTransactions() {
-    this.chain.forEach(block => {
+    this.chain.forEach((block) => {
       console.log(`Transactions in Block ${block.index}:`);
-      block.transactions.forEach(transaction => {
+      block.transactions.forEach((transaction) => {
         console.log(transaction);
       });
     });

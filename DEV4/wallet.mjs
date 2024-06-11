@@ -5,9 +5,9 @@ class Wallet {
   constructor(mempool, blockchain) {
     this.publicKey = randomUUID().split("_").join("");
     this.balance = 0;
-    this.mempool = mempool
+    this.mempool = mempool;
     this.blockchain = blockchain;
-    this.updateBalance(); 
+    this.updateBalance();
   }
 
   initiateTransaction(amount, recipientPublicKey) {
@@ -19,24 +19,24 @@ class Wallet {
     const transaction = new Transaction(amount, this.publicKey, recipientPublicKey);
     this.mempool.addTransaction(transaction);
 
-    console.log(`Se ha enviado ${amount} fondos a la billetera con clave pública ${recipientPublicKey}`);
+    console.log(`Transaction initiated: ${amount} from ${this.publicKey} to ${recipientPublicKey}`);
   }
 
   updateBalance() {
     let balance = 0;
-    const allTransactions = this.mempool.getPendingTransactions();
+    const allTransactions = this.blockchain.getBlockchain().flatMap(block => block.transactions);
 
     allTransactions.forEach(transaction => {
       if (transaction.recipientPublicKey === this.publicKey) {
-        balance += transaction.amount;
+        balance += transaction.coinAmount;
       }
       if (transaction.senderPublicKey === this.publicKey) {
-        balance -= transaction.amount;
+        balance -= transaction.coinAmount;
       }
     });
 
     this.balance = balance;
-    console.log(`Balance actualizado: ${this.balance}`);
+    console.log(`Balance updated: ${this.balance}`);
   }
 
   getBalance(){
