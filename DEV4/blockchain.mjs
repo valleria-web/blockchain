@@ -1,20 +1,38 @@
 import Block from "./block.mjs";
 import Coin from "./coin.mjs";
+import Mempool from "./mempool.mjs";
+import Transaction from "./transaction.mjs";
+import Wallet from "./wallet.mjs";
 
 class Blockchain {
-  constructor(coin) {
+  constructor() {
     if (Blockchain.instance) {
       return Blockchain.instance;
     }
     Blockchain.instance = this;
-    this.coin = coin;
+    this.coin =  new Coin("Bitcoin", "BTC", 100);
     this.chain = [];
+    this.mempool = new Mempool();
+    this.genesisWallet = this.createGenesisWallet();   
     this.createGenesisBlock();
   }
 
+  createGenesisWallet(){
+    const wallet = new Wallet(this.mempool, this);
+    console.log(wallet);
+    return wallet;
+
+  }
+
+  createGenesisTransaction(){
+    const coinbase = this.coin.mintCoinbase()
+    const transaction = new Transaction();
+    return transaction.createTransaction(coinbase, "0",  this.genesisWallet.publicKey);
+  }    
+
   createGenesisBlock() {
-    const coinbase = this.coin.mintCoinbase();
-    const genesisBlock = Block.createBlock(1, "0", "0", "0", [], coinbase);
+    const rewardTransaction = this.createGenesisTransaction();
+    const genesisBlock = Block.createBlock(1, "0", "0", "0", [rewardTransaction]);
     this.addBlock(genesisBlock);
   }
 

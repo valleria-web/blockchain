@@ -25,13 +25,7 @@ class Miner {
     return nonce - 1;
   }
 
-  addCoinbaseTransaction(){
-    const coinbaseTransaction = new Transaction()
-
-  }
-
   mineBlock() {
-    
     const lastBlock = this.blockchain.getLastBlock();
     const previousBlockHash = lastBlock.hash;
     const nonce = this.proofOfWork(previousBlockHash);
@@ -44,7 +38,7 @@ class Miner {
       nonce: nonce,
       hash: blockHash,
       previousBlockHash: previousBlockHash,
-      transactions: "0",
+      transactions: [],
     };
 
     if (this.isValidHash(blockHash)) {

@@ -24,7 +24,7 @@ class Wallet {
 
   updateBalance() {
     let balance = 0;
-    const allTransactions = this.blockchain.getAllTransactions();
+    const allTransactions = this.mempool.getPendingTransactions();
 
     allTransactions.forEach(transaction => {
       if (transaction.recipientPublicKey === this.publicKey) {

@@ -17,6 +17,3 @@ class Transaction {
 }
 
 export default Transaction;
-
-const transaction1 = new Transaction(1, "0", "0");
-console.log(transaction1)

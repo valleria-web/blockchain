@@ -12,7 +12,7 @@ class Coin {
   }
 
   mintCoinbase() {
-    const amount = 50;
+    const amount = 1;
     if (
       amount <= this.totalSupply &&
       this.actualSupply + amount <= this.totalSupply
