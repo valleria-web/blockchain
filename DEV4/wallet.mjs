@@ -7,7 +7,7 @@ class Wallet {
     this.balance = 0;
     this.mempool = mempool;
     this.blockchain = blockchain;
-    this.updateBalance();
+    this.getBalance();
   }
 
   initiateTransaction(amount, recipientPublicKey) {
@@ -22,7 +22,7 @@ class Wallet {
     console.log(`Transaction initiated: ${amount} from ${this.publicKey} to ${recipientPublicKey}`);
   }
 
-  updateBalance() {
+  getBalance() {
     let balance = 0;
     const allTransactions = this.blockchain.getBlockchain().flatMap(block => block.transactions);
 
@@ -36,10 +36,6 @@ class Wallet {
     });
 
     this.balance = balance;
-    console.log(`Balance updated: ${this.balance}`);
-  }
-
-  getBalance(){
     return this.balance;
   }
 }

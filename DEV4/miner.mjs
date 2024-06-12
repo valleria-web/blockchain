@@ -31,6 +31,13 @@ class Miner {
     const previousBlockHash = lastBlock.hash;
     const nonce = this.proofOfWork(previousBlockHash);
     const blockHash = this.hashBlock(previousBlockHash, nonce);
+    const coinbase = this.blockchain.coin.mintCoinbase(); 
+    const rewardTransaction = new Transaction(
+      coinbase,
+      "0",
+      this.wallet.publicKey
+    );
+    this.mempool.addTransaction(rewardTransaction);
 
     const newIndex = lastBlock.index + 1;
     const newBlock = {
@@ -47,6 +54,7 @@ class Miner {
       this.confirmTransactions(newBlock.transactions); 
       this.blockchain.addBlock(newBlock);
       this.mempool.removeConfirmedTransactions();
+      this.wallet.getBalance();
       return newBlock;
     } else {
       console.log("Block rejected: Invalid nonce.");

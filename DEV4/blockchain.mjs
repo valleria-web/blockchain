@@ -30,7 +30,8 @@ class Blockchain {
     ]);
     this.addBlock(genesisBlock);
     this.confirmTransactions([rewardTransaction]);
-    this.genesisWallet.updateBalance(); 
+    this.genesisWallet.getBalance(); 
+    console.log("Genesis Wallet Balance:", this.genesisWallet.getBalance())
   }
 
   confirmTransactions(transactions) {
