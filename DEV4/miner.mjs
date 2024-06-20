@@ -1,4 +1,3 @@
-import sha256 from "sha256";
 import Transaction from "./transaction.mjs";
 
 class Miner {

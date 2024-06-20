@@ -1,8 +1,6 @@
-import { randomUUID } from "crypto";
-
 class Transaction {
   constructor(amount, sender, recipient) {
-    this.transactionId = randomUUID().split("_").join("");
+    this.transactionId = uuidv4().replace(/-/g, "");
     this.coinAmount = amount;
     this.senderPublicKey = sender;
     this.recipientPublicKey = recipient;

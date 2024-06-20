@@ -23,5 +23,3 @@ class Mempool {
 }
 
 export default Mempool;
-
-

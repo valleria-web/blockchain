@@ -1,62 +1,122 @@
 @startuml
 
-class Coin {
-    - name: string
-    - ticker: string
-    - initialSupply: int
-    - actualSupply: int
-    - totalSupply: int
-    + Coin(name: string, ticker: string, totalSupply: int)
-    + mintCoinbase(): int
-    + getCoin(): object
-    + getActualSupply(): int
-    + getTotalSupply(): int
+!define Blockchain Blockchain
+!define Miner Miner
+!define Mempool Mempool
+!define Wallet Wallet
+!define Block Block
+!define Coin Coin
+!define Transaction Transaction
+
+class App {
+  -blockchain : Blockchain
+  -mempool : Mempool
+  -wallet2 : Wallet
+  -miner : Miner
+  -intervalId : any
+  +startMining() : void
+  +mineBlockAtInterval() : void
+  +stopMining() : void
 }
 
-class Block {
-    - index: int
-    - timestamp: int
-    - nonce: string
-    - hash: string
-    - previousBlockHash: string
-    - transactions: array
-    - coinbase: int
-    + createBlock(index: int, nonce: string, hash: string, previousBlockHash: string, transactions: array): Block
-    + addTransaction(transaction: object): void
-    + getTransactions(): array
-}
+App o-- Blockchain: agregación
+App o-- Mempool: agregación
+App o-- Wallet: agregación
+App o-- Miner: agregación
 
 class Blockchain {
-    - chain: array
-    - coin: Coin
-    + createGenesisBlock(): void
-    + addBlock(block: Block): void
-    + validateBlock(block: Block): boolean
-    + getLastBlock(): Block
-    + getBlockchain(): array
-    + viewTransactions(): void
-    + createGenesisBlock(): Block
+  -coin : Coin
+  -chain : List<Block>
+  -genesisWallet : Wallet
+  -mempool : Mempool
+  +createGenesisBlock() : void
+  +confirmTransactions(transactions : List<Transaction>) : void
+  +addBlock(block : Block) : void
+  +validateBlock(block : Block) : boolean
+  +getLastBlock() : Block
+  +getBlockchain() : List<Block>
+  +viewTransactions() : void
 }
+
+Blockchain o-- Block: agregación
+Blockchain o-- Coin: agregación
+Blockchain o-- Transaction: agregación
+Blockchain o-- Wallet: agregación
+Blockchain o-- Mempool: agregación
+
+class Miner {
+  -minerId : String
+  -blockchain : Blockchain
+  -mempool : Mempool
+  -wallet : Wallet
+  +hashBlock(previousBlockHash : String, nonce : int) : String
+  +proofOfWork(previousBlockHash : String) : int
+  +mineBlock() : Block
+  +confirmTransactions(transactions : List<Transaction>) : void
+  +isValidHash(blockHash : String) : boolean
+}
+
+Miner o-- Blockchain: agregación
+Miner o-- Mempool: agregación
+Miner o-- Wallet: agregación
+
+class Mempool {
+  -pendingTransactions : List<Transaction>
+  +addTransaction(transaction : Transaction) : void
+  +removeConfirmedTransactions() : void
+  +getPendingTransactions() : List<Transaction>
+}
+
+Mempool o-- Transaction: agregación
+
+class Wallet {
+  -publicKey : String
+  -balance : int
+  -mempool : Mempool
+  -blockchain : Blockchain
+  +initiateTransaction(amount : int, recipientPublicKey : String) : void
+  +getBalance() : int
+}
+
+Wallet o-- Mempool: agregación
+Wallet o-- Blockchain: agregación
+
+class Block {
+  -index : int
+  -timestamp : int
+  -nonce : int
+  -hash : String
+  -previousBlockHash : String
+  -transactions : List<Transaction>
+  +createBlock(index : int, nonce : int, hash : String, previousBlockHash : String, transactions : List<Transaction>) : Block
+  +addTransaction(transaction : Transaction) : void
+  +getTransactions() : List<Transaction>
+}
+
+Block o-- Transaction: agregación
 
 class Coin {
-    - name: string
-    - ticker: string
-    - initialSupply: int
-    - actualSupply: int
-    - totalSupply: int
-    - instance: Coin
-    + constructor(name: string, ticker: string, totalSupply: int)
-    + mintCoinbase(): int
-    + getCoin(): object
-    + getActualSupply(): int
-    + getTotalSupply(): int
+  -name : String
+  -ticker : String
+  -initialSupply : int
+  -actualSupply : int
+  -totalSupply : int
+  +mintCoinbase() : int
+  +getCoin() : Map
+  +getActualSupply() : int
+  +getTotalSupply() : int
 }
 
+class Transaction {
+  -transactionId : String
+  -coinAmount : int
+  -senderPublicKey : String
+  -recipientPublicKey : String
+  -isConfirmed : boolean
+  +createTransaction(amount : int, sender : String, recipient : String) : Transaction
+}
 
-Blockchain "1" *-- "n" Block : contains
-Blockchain "1" *-- "1"  Coin : contains
-Block "1" --> "n" Transaction : contains
-Transaction "1" --> "n" Coin: contains
 @enduml
+
 
 

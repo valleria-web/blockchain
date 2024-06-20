@@ -1,32 +1,47 @@
-import { randomUUID } from "crypto";
 import Transaction from "./transaction.mjs";
 
 class Wallet {
   constructor(mempool, blockchain) {
-    this.publicKey = randomUUID().split("_").join("");
+    this.publicKey = uuidv4().replace(/-/g, "");
     this.balance = 0;
     this.mempool = mempool;
     this.blockchain = blockchain;
     this.getBalance();
   }
 
-  initiateTransaction(amount, recipientPublicKey) {
+  getWallet() {
+    this.getBalance();
+    return {
+      publicKey: this.publicKey,
+      balance: this.balance,
+    };
+  }
+
+  sendFounds(amount, recipientPublicKey) {
     if (this.balance < amount) {
       console.log("Insufficient funds");
       return;
     }
 
-    const transaction = new Transaction(amount, this.publicKey, recipientPublicKey);
+    const transaction = new Transaction(
+      amount,
+      this.publicKey,
+      recipientPublicKey
+    );
     this.mempool.addTransaction(transaction);
 
-    console.log(`Transaction initiated: ${amount} from ${this.publicKey} to ${recipientPublicKey}`);
+    console.log(
+      `Transaction initiated: ${amount} from ${this.publicKey} to ${recipientPublicKey}`
+    );
   }
 
   getBalance() {
-    let balance = 0;
-    const allTransactions = this.blockchain.getBlockchain().flatMap(block => block.transactions);
+    let balance = 50;
+    const allTransactions = this.blockchain
+      .getBlockchain()
+      .flatMap((block) => block.transactions);
 
-    allTransactions.forEach(transaction => {
+    allTransactions.forEach((transaction) => {
       if (transaction.recipientPublicKey === this.publicKey) {
         balance += transaction.coinAmount;
       }
@@ -41,4 +56,3 @@ class Wallet {
 }
 
 export default Wallet;
-

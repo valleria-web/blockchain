@@ -30,8 +30,8 @@ class Blockchain {
     ]);
     this.addBlock(genesisBlock);
     this.confirmTransactions([rewardTransaction]);
-    this.genesisWallet.getBalance(); 
-    console.log("Genesis Wallet Balance:", this.genesisWallet.getBalance())
+    this.genesisWallet.getBalance();
+    console.log("Genesis Wallet Balance:", this.genesisWallet.getBalance());
   }
 
   confirmTransactions(transactions) {
@@ -74,6 +74,8 @@ class Blockchain {
       });
     });
   }
+
+  
 }
 
 export default Blockchain;
