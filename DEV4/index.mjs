@@ -7,6 +7,7 @@ import Wallet from "./wallet.mjs";
 import WalletView from "./walletView.mjs";
 import CoinView from "./coinView.mjs";
 import Transaction from "./transaction.mjs";
+import TransactionView from "./transactionView.mjs";
 
 const blockchain = new Blockchain();
 const mempool = new Mempool();
@@ -20,7 +21,7 @@ const mempoolView = new MempoolView(mempool);
 const walletView = new WalletView(wallet);
 const walletView1 = new WalletView(wallet1);
 
-wallet.sendFounds(10, wallet1.publicKey)
+wallet.sendFounds(10, wallet1.publicKey);
 
 mempoolView.renderMempool();
 

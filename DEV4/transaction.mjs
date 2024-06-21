@@ -6,12 +6,6 @@ class Transaction {
     this.recipientPublicKey = recipient;
     this.isConfirmed = false;
   }
-
-  createTransaction(amount, sender, recipient) {
-    const newTransaction = new Transaction(amount, sender, recipient);
-    console.log(`New Transaction created: ${JSON.stringify(newTransaction)}`);  
-    return newTransaction;
-  }
 }
 
 export default Transaction;
