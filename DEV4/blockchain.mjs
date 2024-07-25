@@ -19,7 +19,7 @@ class Blockchain {
 
   createGenesisBlock() {
     const coinbase = this.coin.mintCoinbase();
-    this.genesisWallet = new Wallet(this.mempool, this);
+    this.genesisWallet = new Wallet("GenesisWallet", this.mempool, this);
     const rewardTransaction = new Transaction(
       coinbase,
       "0",
@@ -31,6 +31,7 @@ class Blockchain {
     this.addBlock(genesisBlock);
     this.confirmTransactions([rewardTransaction]);
     this.genesisWallet.getBalance();
+    console.log("Genesis Wallet Balance:", this.genesisWallet.getWallet());
     console.log("Genesis Wallet Balance:", this.genesisWallet.getBalance());
   }
 
@@ -74,8 +75,6 @@ class Blockchain {
       });
     });
   }
-
-  
 }
 
 export default Blockchain;

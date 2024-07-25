@@ -1,4 +1,10 @@
+import sha256 from 'crypto-js/sha256';
+import { v4 as uuidv4 } from 'uuid';
 import Transaction from "./transaction.mjs";
+import Blockchain from './blockchain.mjs';
+import Mempool from './mempool.mjs';
+import Wallet from './wallet.mjs';
+import Coin from './coin.mjs';
 
 class Miner {
   constructor(minerId, blockchain, mempool, wallet) {
@@ -11,8 +17,7 @@ class Miner {
   hashBlock(previousBlockHash, nonce) {
     const dataAsString = previousBlockHash + nonce.toString();
     const hash = sha256(dataAsString);
-    //console.log(hash);
-    return hash;
+    return hash.toString();
   }
 
   proofOfWork(previousBlockHash) {
@@ -54,11 +59,39 @@ class Miner {
       this.blockchain.addBlock(newBlock);
       this.mempool.removeConfirmedTransactions();
       this.wallet.getBalance();
+
+      //this.saveState(); 
+
       return newBlock;
     } else {
       console.log("Block rejected: Invalid nonce.");
     }
   }
+
+/*  saveState() {
+    localStorage.setItem('blockchain', stringify(this.blockchain));
+    localStorage.setItem('mempool', stringify(this.mempool));
+    localStorage.setItem('wallet', stringify(this.wallet));
+  }
+*/
+
+/*  loadState() {
+    const blockchainData = localStorage.getItem('blockchain');
+    const mempoolData = localStorage.getItem('mempool');
+    const walletData = localStorage.getItem('wallet');
+
+    if (blockchainData) {
+      this.blockchain = Object.assign(new Blockchain(), parse(blockchainData));
+    }
+    if (mempoolData) {
+      this.mempool = Object.assign(new Mempool(), parse(mempoolData));
+    }
+    if (walletData) {
+      const walletParsed = parse(walletData);
+      this.wallet = new Wallet("MinerWallet", this.mempool, this.blockchain, walletParsed.publicKey, walletParsed.balance);
+    }
+  }
+  */
 
   confirmTransactions(transactions) {
     for (const transaction of transactions) {

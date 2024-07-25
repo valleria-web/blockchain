@@ -1,0 +1,168 @@
+@startuml
+
+!define Blockchain Blockchain
+!define Miner Miner
+!define Mempool Mempool
+!define Wallet Wallet
+!define Block Block
+!define Coin Coin
+!define Transaction Transaction
+!define App App
+!define BlockchainView BlockchainView
+!define CoinView CoinView
+!define MempoolView MempoolView
+!define MinerView MinerView
+!define TransactionView TransactionView
+!define WalletView WalletView
+
+class App {
+  -blockchain : Blockchain
+  -mempool : Mempool
+  -wallet2 : Wallet
+  -miner : Miner
+  -intervalId : any
+  +startMining() : void
+  +mineBlockAtInterval() : void
+  +stopMining() : void
+}
+
+App o-- Blockchain: aggregation
+App o-- Mempool: aggregation
+App o-- Wallet: aggregation
+App o-- Miner: aggregation
+
+class Blockchain {
+  -coin : Coin
+  -chain : List<Block>
+  -genesisWallet : Wallet
+  -mempool : Mempool
+  +createGenesisBlock() : void
+  +confirmTransactions(transactions : List<Transaction>) : void
+  +addBlock(block : Block) : void
+  +validateBlock(block : Block) : boolean
+  +getLastBlock() : Block
+  +getBlockchain() : List<Block>
+  +viewTransactions() : void
+}
+
+Blockchain --|> Coin : dependency
+Blockchain o-- Block: aggregation
+Blockchain o-- Transaction: aggregation
+Blockchain o-- Wallet: aggregation
+Blockchain o-- Mempool: aggregation
+
+class Miner {
+  -minerId : String
+  -blockchain : Blockchain
+  -mempool : Mempool
+  -wallet : Wallet
+  +hashBlock(previousBlockHash : String, nonce : int) : String
+  +proofOfWork(previousBlockHash : String) : int
+  +mineBlock() : Block
+  +confirmTransactions(transactions : List<Transaction>) : void
+  +isValidHash(blockHash : String) : boolean
+}
+
+Miner o-- Blockchain
+Miner o-- Mempool
+Miner o-- Wallet
+
+class Mempool {
+  -pendingTransactions : List<Transaction>
+  +addTransaction(transaction : Transaction) : void
+  +removeConfirmedTransactions() : void
+  +getPendingTransactions() : List<Transaction>
+}
+
+Mempool o-- Transaction
+
+class Wallet {
+  -publicKey : String
+  -balance : int
+  -mempool : Mempool
+  -blockchain : Blockchain
+  +initiateTransaction(amount : int, recipientPublicKey : String) : void
+  +getBalance() : int
+}
+
+Wallet o-- Mempool
+Wallet o-- Blockchain
+
+class Block {
+  -index : int
+  -timestamp : int
+  -nonce : int
+  -hash : String
+  -previousBlockHash : String
+  -transactions : List<Transaction>
+  +createBlock(index : int, nonce : int, hash : String, previousBlockHash : String, transactions : List<Transaction>) : Block
+  +addTransaction(transaction : Transaction) : void
+  +getTransactions() : List<Transaction>
+}
+
+Block o-- Transaction
+
+class Coin {
+  -name : String
+  -ticker : String
+  -initialSupply : int
+  -actualSupply : int
+  -totalSupply : int
+  +mintCoinbase() : int
+  +getCoin() : Map
+  +getActualSupply() : int
+  +getTotalSupply() : int
+}
+
+class Transaction {
+  -transactionId : String
+  -coinAmount : int
+  -senderPublicKey : String
+  -recipientPublicKey : String
+  -isConfirmed : boolean
+  +createTransaction(amount : int, sender : String, recipient : String) : Transaction
+}
+
+class BlockchainView {
+  -blockchain : Blockchain
+  -blockchainContainer : HTMLElement
+  +renderBlockchain() : void
+}
+
+class CoinView {
+  -coin : Coin
+  -coinContainer : HTMLElement
+  +renderCoin() : void
+}
+
+class MempoolView {
+  -transactions : List<Transaction>
+  -mempoolContainer : HTMLElement
+  +renderMempool() : void
+}
+
+class MinerView {
+  -miner : Miner
+  +initUI() : void
+  +mineBlockBtn() : void
+  +updateUI() : void
+}
+
+class TransactionView {
+  -transaction : Transaction
+  -transactionContainer : HTMLElement
+  +renderTransaction() : void
+}
+
+class WalletView {
+  -wallet : Wallet
+  -walletContainer : HTMLElement
+  +renderWallet() : void
+}
+
+
+
+@enduml
+
+
+

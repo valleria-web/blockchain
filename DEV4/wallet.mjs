@@ -1,20 +1,28 @@
+import { v4 as uuidv4 } from 'uuid';
 import Transaction from "./transaction.mjs";
 
 class Wallet {
-  constructor(mempool, blockchain) {
-    this.publicKey = uuidv4().replace(/-/g, "");
-    this.balance = 0;
+  constructor(name = "", mempool, blockchain, publicKey = null, balance = 0) {
+    this.name = name;
     this.mempool = mempool;
     this.blockchain = blockchain;
-    this.getBalance();
+    this.publicKey = publicKey || uuidv4().replace(/-/g, "");
+    this.balance = balance;
+    this.updateBalance();
   }
 
   getWallet() {
-    this.getBalance();
+    this.updateBalance();
     return {
+      name: this.name,
       publicKey: this.publicKey,
       balance: this.balance,
     };
+  }
+
+  getBalance() {
+    this.updateBalance(); 
+    return this.balance; 
   }
 
   sendFounds(amount, recipientPublicKey) {
@@ -35,23 +43,27 @@ class Wallet {
     );
   }
 
-  getBalance() {
-    let balance = 50;
-    const allTransactions = this.blockchain
-      .getBlockchain()
-      .flatMap((block) => block.transactions);
+  updateBalance() {
+    let balance = 10;
+    if (
+      this.blockchain &&
+      typeof this.blockchain.getBlockchain === "function"
+    ) {
+      const allTransactions = this.blockchain
+        .getBlockchain()
+        .flatMap((block) => block.transactions);
 
-    allTransactions.forEach((transaction) => {
-      if (transaction.recipientPublicKey === this.publicKey) {
-        balance += transaction.coinAmount;
-      }
-      if (transaction.senderPublicKey === this.publicKey) {
-        balance -= transaction.coinAmount;
-      }
-    });
+      allTransactions.forEach((transaction) => {
+        if (transaction.recipientPublicKey === this.publicKey) {
+          balance += transaction.coinAmount;
+        }
+        if (transaction.senderPublicKey === this.publicKey) {
+          balance -= transaction.coinAmount;
+        }
+      });
+    }
 
     this.balance = balance;
-    return this.balance;
   }
 }
 

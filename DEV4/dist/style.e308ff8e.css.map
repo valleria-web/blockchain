@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","file":"style.e308ff8e.css","sourceRoot":"..","sourcesContent":[".block {\r\n  border: 1px solid #000;\r\n  padding: 10px;\r\n  margin: 10px;\r\n  background-color: #f9f9f9;\r\n}\r\n\r\n.block li {\r\n  list-style: none;\r\n}\r\n"]}

@@ -25,6 +25,7 @@ class BlockchainView {
         <li>Amount: ${transaction.coinAmount}</li>
         <li>Sender: ${transaction.senderPublicKey}</li>
         <li>Recipient: ${transaction.recipientPublicKey}</li>
+        <li>isConfirmed: ${transaction.isConfirmed}</li>
         </ul>`
       )
       .join("")}</li>
