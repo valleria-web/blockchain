@@ -4,6 +4,7 @@ import Transaction from "./transaction.mjs";
 import Wallet from "./wallet.mjs";
 import Mempool from "./mempool.mjs";
 
+
 class Blockchain {
   constructor() {
     if (Blockchain.instance) {

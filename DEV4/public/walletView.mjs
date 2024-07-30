@@ -7,13 +7,20 @@ class WalletView extends Observer {
     }
 
     update(event, data) {
-        if (event === 'newWalletCreated') {
+        if (event === 'sendFounds') {
             this.renderWallet(data);
         }
     }
 
     renderWallet(walletData) {
-        const { name, publicKey, balance } = walletData;
+
+        if (!walletData) {
+            console.error('walletData está indefinido:', walletData);
+            return;
+        }
+
+        
+        const { name, publicKey, amount, recipientPublicKey} = walletData;
 
         const newWalletDiv = document.createElement("div");
         newWalletDiv.classList.add("wallet");
@@ -23,7 +30,8 @@ class WalletView extends Observer {
                 <h3>Wallet</h3>
                 <li>Name: ${name}</li>
                 <li>PublicKey: ${publicKey}</li>
-                <p>Balance: ${balance}</p>
+                <li>Amount: ${amount}</li>
+                <li>Receiver: ${recipientPublicKey}</li>
             </ul>`;
 
         this.walletContainer.appendChild(newWalletDiv);

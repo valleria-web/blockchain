@@ -1,5 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
-import Transaction from "./transaction.mjs";
+import { v4 as uuidv4 } from 'https://cdn.skypack.dev/uuid';
+import Transaction from './transaction.mjs';
+
 
 class Wallet {
   constructor(name = "", mempool, blockchain, publicKey = null, balance = 0) {
@@ -44,7 +45,7 @@ class Wallet {
   }
 
   updateBalance() {
-    let balance = 10;
+    let balance = 0;
     if (
       this.blockchain &&
       typeof this.blockchain.getBlockchain === "function"
