@@ -13,11 +13,33 @@ class App {
 
   start() {
     const blockchain = new Blockchain();
-    const eventManager = new EventManager();
-    const coinView = new CoinView(blockchain);
-    coinView.renderCoin();
+    const mempool = new Mempool();
+    const wallet1 = new Wallet("Wallet1", mempool, blockchain);
+    const miner1 = new Miner("Miner1", blockchain, mempool, wallet1);
 
-    eventManager.register(coinView);
+    const coinView = new CoinView(blockchain);
+    const mempoolView = new MempoolView(mempool);
+    const blockchainView = new BlockchainView(blockchain);
+
+    const walletView = new WalletView(blockchain.genesisWallet);
+    const walletView1 = new WalletView(wallet1);
+
+    blockchain.genesisWallet.sendFounds(1, wallet1.publicKey);
+
+    miner1.mineBlock();
+
+    setTimeout(() => {
+      miner1.mineBlock();
+
+      setTimeout(() => {
+        miner1.mineBlock();
+        coinView.renderCoin();
+        mempoolView.renderMempool();
+        blockchainView.renderBlockchain();
+        walletView.renderWallet();
+        walletView1.renderWallet();
+      }, 4 * 1000);
+    }, 4 * 1000);
   }
 }
 

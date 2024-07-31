@@ -1,43 +1,27 @@
-import Observer from "./Observer.mjs";
+class WalletView {
+  constructor(wallet) {
+    this.wallet = wallet;
+    this.walletContainer = document.getElementById("wallet-container");
+  }
 
-class WalletView extends Observer {
-    constructor() {
-        super();
-        this.walletContainer = document.getElementById("wallet-container");
-    }
+  renderWallet() {
+    const walletData = this.wallet.getWallet();
 
-    update(event, data) {
-        if (event === 'sendFounds') {
-            this.renderWallet(data);
-        }
-    }
+    const { name, publicKey, balance } = walletData;
 
-    renderWallet(walletData) {
+    const newWalletDiv = document.createElement("div");
+    newWalletDiv.classList.add("wallet");
 
-        if (!walletData) {
-            console.error('walletData está indefinido:', walletData);
-            return;
-        }
-
-        
-        const { name, publicKey, amount, recipientPublicKey} = walletData;
-
-        const newWalletDiv = document.createElement("div");
-        newWalletDiv.classList.add("wallet");
-
-        newWalletDiv.innerHTML = `
+    newWalletDiv.innerHTML = `
             <ul class="block">
                 <h3>Wallet</h3>
                 <li>Name: ${name}</li>
                 <li>PublicKey: ${publicKey}</li>
-                <li>Amount: ${amount}</li>
-                <li>Receiver: ${recipientPublicKey}</li>
+                <li>Balance: ${balance}</li>
             </ul>`;
 
-        this.walletContainer.appendChild(newWalletDiv);
-    }
+    this.walletContainer.appendChild(newWalletDiv);
+  }
 }
 
 export default WalletView;
-
-
