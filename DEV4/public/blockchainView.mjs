@@ -1,16 +1,32 @@
 class BlockchainView {
-  constructor(blockchain) {
-    this.blockchain = blockchain;
+  constructor() {
     this.blockchainContainer = document.getElementById("blockchain-container");
+    this.renderButton = document.getElementById("renderBlockchainButton");
+    this.setupEventListener();
   }
 
-  renderBlockchain() {
-    const chain = this.blockchain.getBlockchain();
+  setupEventListener() {
+    this.renderButton.addEventListener("click", () => {
+      console.log("Clic");
+      this.renderBlockchain();
+    });
+  }
+
+  onRenderBlockchain(callback) {
+    this.renderBlockchain = callback;
+  }
+
+  render(chain) {
+    if (!Array.isArray(chain)) {
+      console.error("Invalid blockchain data:", chain);
+      return;
+    }
+
     let blockchainHTML = "";
 
     chain.forEach((block) => {
       blockchainHTML += `
-  <ul class="block">
+    <ul class="block">
     <h3>Block:</h3>
     <li>Index: ${block.index}</li>
     <li>Timestamp: ${block.timestamp}</li>
@@ -20,7 +36,7 @@ class BlockchainView {
     <li>Transactions: ${block.transactions
       .map(
         (transaction) =>
-       `<ul class="block">
+          `<ul class="block">
         <li>Transaction ID: ${transaction.transactionId}</li>
         <li>Amount: ${transaction.coinAmount}</li>
         <li>Sender: ${transaction.senderPublicKey}</li>
@@ -29,7 +45,7 @@ class BlockchainView {
         </ul>`
       )
       .join("")}</li>
-  </ul>`;
+    </ul>`;
     });
 
     this.blockchainContainer.innerHTML = blockchainHTML;

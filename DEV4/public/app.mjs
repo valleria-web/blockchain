@@ -7,19 +7,26 @@ import MempoolView from "./mempoolView.mjs";
 import Miner from "./miner.mjs";
 import WalletView from "./walletView.mjs";
 import EventManager from "./EventManager.mjs";
+import BlockchainController from "./blockchainController.mjs";
+
 
 class App {
   constructor() {}
 
   start() {
     const blockchain = new Blockchain();
+    const blockchainView = new BlockchainView();
+    const blockchainController = new BlockchainController(blockchain, blockchainView);
+    
+    
+    /*
     const mempool = new Mempool();
     const wallet1 = new Wallet("Wallet1", mempool, blockchain);
     const miner1 = new Miner("Miner1", blockchain, mempool, wallet1);
 
     const coinView = new CoinView(blockchain);
     const mempoolView = new MempoolView(mempool);
-    const blockchainView = new BlockchainView(blockchain);
+
 
     const walletView = new WalletView(blockchain.genesisWallet);
     const walletView1 = new WalletView(wallet1);
@@ -40,6 +47,8 @@ class App {
         walletView1.renderWallet();
       }, 4 * 1000);
     }, 4 * 1000);
+      */
+
   }
 }
 

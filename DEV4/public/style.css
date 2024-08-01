@@ -8,3 +8,8 @@
 .block li {
   list-style: none;
 }
+
+#blockchain-container {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
