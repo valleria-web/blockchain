@@ -1,11 +1,22 @@
 class CoinView {
-  constructor(blockhain) {
-    this.coin = blockhain.coin;
+  constructor() {
     this.coinContainer = document.getElementById("coin-container");
+    this.renderCoinBtn = document.getElementById("render-coin-btn");
+    this.setupEventListener();
   }
 
-  renderCoin() {
-    const coinData = this.coin.getCoin();
+  setupEventListener() {
+    this.renderCoinBtn.addEventListener("click", () => {
+      console.log("Click");
+      this.renderCoin();
+    });
+  }
+
+  onRenderCoin(callback) {
+    this.renderCoin = callback;
+  }
+
+  render(coinData) {
     const { name, ticker, initialSupply, actualSupply, totalSupply } = coinData;
 
     const newDiv = document.createElement("div");
@@ -13,16 +24,18 @@ class CoinView {
 
     newDiv.innerHTML = `
     <ul class="block">
-    <h3>Coin</h3>
-          <li>Name: ${name}</li>
-          <li>Ticker: ${ticker}</li> 
-          <li>Initial Supply: ${initialSupply}</li>       
-          <li>Actual Supply: ${actualSupply}</li>    
-          <li>Total Supply: ${totalSupply}</li>
+      <h3>Coin</h3>
+      <li>Name: ${name}</li>
+      <li>Ticker: ${ticker}</li> 
+      <li>Initial Supply: ${initialSupply}</li>       
+      <li>Actual Supply: ${actualSupply}</li>    
+      <li>Total Supply: ${totalSupply}</li>
     </ul>`;
 
+    this.coinContainer.innerHTML = '';
     this.coinContainer.appendChild(newDiv);
   }
 }
 
 export default CoinView;
+

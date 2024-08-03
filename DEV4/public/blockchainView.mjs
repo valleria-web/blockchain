@@ -1,13 +1,13 @@
 class BlockchainView {
   constructor() {
     this.blockchainContainer = document.getElementById("blockchain-container");
-    this.renderButton = document.getElementById("renderBlockchainButton");
+    this.renderBlockchainBtn = document.getElementById("render-blockchain-btn");
     this.setupEventListener();
   }
 
   setupEventListener() {
-    this.renderButton.addEventListener("click", () => {
-      console.log("Clic");
+    this.renderBlockchainBtn.addEventListener("click", () => {
+      console.log("Click");
       this.renderBlockchain();
     });
   }

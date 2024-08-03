@@ -8,6 +8,9 @@ import Miner from "./miner.mjs";
 import WalletView from "./walletView.mjs";
 import EventManager from "./EventManager.mjs";
 import BlockchainController from "./blockchainController.mjs";
+import MinerController from "./minerController.mjs";
+import MinerView from "./minerView.mjs";
+import CoinController from "./coinController.mjs";
 
 
 class App {
@@ -16,38 +19,19 @@ class App {
   start() {
     const blockchain = new Blockchain();
     const blockchainView = new BlockchainView();
-    const blockchainController = new BlockchainController(blockchain, blockchainView);
-    
-    
-    /*
+    const blockchainController = new BlockchainController(blockchain, blockchainView);    
+
     const mempool = new Mempool();
-    const wallet1 = new Wallet("Wallet1", mempool, blockchain);
-    const miner1 = new Miner("Miner1", blockchain, mempool, wallet1);
+    const wallet = new Wallet("minerWaller", mempool, blockchain)
 
-    const coinView = new CoinView(blockchain);
-    const mempoolView = new MempoolView(mempool);
+    const miner = new Miner("Miner1", blockchain, mempool, wallet, CryptoJS);
+    const minerView = new MinerView();
+    const minerController = new MinerController(miner, minerView);
+
+    const coinView = new CoinView();
+    const coinController = new CoinController(blockchain, coinView);
 
 
-    const walletView = new WalletView(blockchain.genesisWallet);
-    const walletView1 = new WalletView(wallet1);
-
-    blockchain.genesisWallet.sendFounds(1, wallet1.publicKey);
-
-    miner1.mineBlock();
-
-    setTimeout(() => {
-      miner1.mineBlock();
-
-      setTimeout(() => {
-        miner1.mineBlock();
-        coinView.renderCoin();
-        mempoolView.renderMempool();
-        blockchainView.renderBlockchain();
-        walletView.renderWallet();
-        walletView1.renderWallet();
-      }, 4 * 1000);
-    }, 4 * 1000);
-      */
 
   }
 }

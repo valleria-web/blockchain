@@ -1,24 +1,19 @@
 class MinerView {
-  constructor(minerInstance) {
-    this.miner = minerInstance;
-    this.initUI();
+  constructor() {
+    this.mineBlockBtn = document.getElementById("mineBlockBtn");
+    this.setupEventListener();
   }
 
-  initUI() {
-    const button = document.createElement("button");
-    button.innerText = "Mine Block";
-    button.id = "mine-block-btn";
-    button.addEventListener("click", () => this.mineBlockBtn());
-    document.getElementById("mine-block-btn-container").appendChild(button);
-    this.updateUI();
+  setupEventListener() {
+    this.mineBlockBtn.addEventListener("click", () => {
+      console.log("Clic");
+      this.mineBlock();
+    });
   }
 
-  mineBlockBtn() {
-    this.miner.mineBlock();
-    this.updateUI();
-    //console.log(blockchain.coin);
-  }  
+  onMineBlock(callback) {
+    this.mineBlock = callback;
+  }
 }
 
 export default MinerView;
-

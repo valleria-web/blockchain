@@ -6,9 +6,9 @@ class BlockchainController {
   }
 
   renderBlockchain() {
-    const blockchain = this.blockchain.getBlockchain();
-    console.log("Blockchain data:", blockchain);
-    this.blockchainView.render(blockchain);
+    const blockchainData = this.blockchain.getBlockchain();
+    console.log("Blockchain data:", blockchainData);
+    this.blockchainView.render(blockchainData);
   }
 }
 

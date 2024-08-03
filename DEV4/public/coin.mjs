@@ -1,5 +1,3 @@
-import EventManager from "./EventManager.mjs";
-
 class Coin {
   constructor(name, ticker, totalSupply) {
     if (Coin.instance) {
@@ -11,7 +9,6 @@ class Coin {
     this.actualSupply = this.initialSupply;
     this.totalSupply = totalSupply;
     Coin.instance = this;
-    this.eventManager = new EventManager();
   }
 
   mintCoinbase() {
@@ -21,7 +18,6 @@ class Coin {
       this.actualSupply + amount <= this.totalSupply
     ) {
       this.actualSupply += amount;
-      this.eventManager.notify('newCoinCreated', console.log(`${amount} coins created`));
       return amount;
     } else {
       console.log(`Mint ${amount} coins exceeded total supply, mint rejected`);
