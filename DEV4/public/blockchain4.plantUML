@@ -14,8 +14,6 @@
 !define MinerView MinerView
 !define TransactionView TransactionView
 !define WalletView WalletView
-!define EventManager EventManager
-!define Observer Observer
 !define BlockchainController BlockchainController
 
 package "Modelos" {
@@ -44,7 +42,6 @@ package "Modelos" {
     -blockchain : Blockchain
     -mempool : Mempool
     -wallet : Wallet
-    -eventManager : EventManager
     +hashBlock(previousBlockHash : String, nonce : int) : String
     +proofOfWork(previousBlockHash : String) : int
     +mineBlock() : Block
@@ -55,7 +52,6 @@ package "Modelos" {
   Miner o-- Blockchain
   Miner o-- Mempool
   Miner o-- Wallet
-  Miner o-- EventManager
 
   class Mempool {
     -pendingTransactions : List<Transaction>
@@ -66,7 +62,6 @@ package "Modelos" {
   }
 
   Mempool o-- Transaction
-  Mempool o-- EventManager
 
   class Wallet {
     -publicKey : String
@@ -154,12 +149,6 @@ package "Vistas" {
     +renderWallet() : void
   }
 
-  BlockchainView --|> Observer
-  CoinView --|> Observer
-  MempoolView --|> Observer
-  MinerView --|> Observer
-  TransactionView --|> Observer
-  WalletView --|> Observer
 }
 
 package "Controladores" {
@@ -180,15 +169,7 @@ package "Controladores" {
   App o-- Mempool: aggregation
   App o-- Wallet: aggregation
   App o-- Miner: aggregation
-  App o-- EventManager: aggregation
 
-  class EventManager {
-    -observers : List<Observer>
-    +register(observer : Observer) : void
-    +notify(event : String, data : any) : void
-  }
-
-  EventManager o-- Observer
 
   class BlockchainController {
     -blockchain : Blockchain
@@ -196,8 +177,24 @@ package "Controladores" {
     +renderBlockchain() : void
   }
 
+    class CoinController{
+    -blockchain : Blockchain 
+    -coinView : CoinView
+    +renderCoin(): void
+  }
+
+  class MinerController{
+    -miner : Miner 
+    -minerView : MinerView
+    +mineBlock(): void
+  }
+
   BlockchainController o-- Blockchain
   BlockchainController o-- BlockchainView
+  CoinController o-- Blockchain
+  CoinController o-- CoinView
+  MinerController o-- Miner
+  MinerController o-- MinerView
 }
 
 @enduml
