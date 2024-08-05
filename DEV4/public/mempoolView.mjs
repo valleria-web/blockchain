@@ -1,13 +1,26 @@
 class MempoolView {
-  constructor(mempool) {
-    this.transactions = mempool.pendingTransactions;
+  constructor() {
     this.mempoolContainer = document.getElementById("mempool-container");
+    this.renderMempoolBtn = document.getElementById("render-mempool-btn");
+    this.setupEventLister();
   }
 
-  renderMempool() {
-    let mempoolHTML = "<h3>Mempool Pending Transactions:</h3>";
+  setupEventLister() {
+    this.renderMempoolBtn.addEventListener("click", () => {
+      console.log("Click");
+      this.renderMempool();
+    });
+  }
 
-    this.transactions.forEach((transaction) => {
+  onRenderMempool(callback) {
+    this.renderMempool = callback;
+  }
+
+  render(transaction) {
+
+    let mempoolHTML = "";
+
+    transaction.forEach((transaction) => {
       mempoolHTML += `
         <ul class="block">
           <li>Transaction Id: ${transaction.transactionId}</li>
@@ -24,4 +37,3 @@ class MempoolView {
 }
 
 export default MempoolView;
-

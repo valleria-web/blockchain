@@ -17,10 +17,10 @@ class BlockchainView {
   }
 
   render(chain) {
-    if (!Array.isArray(chain)) {
+    /*if (!Array.isArray(chain)) {
       console.error("Invalid blockchain data:", chain);
       return;
-    }
+    }*/
 
     let blockchainHTML = "";
 
