@@ -1,10 +1,10 @@
 {
   "name": "dev4",
   "version": "1.0.0",
-  "main": "index.mjs",
+  "main": "app.mjs",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start": "node app.js",
     "test": "jest"
   },
   "author": "",

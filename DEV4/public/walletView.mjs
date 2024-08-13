@@ -1,26 +1,45 @@
 class WalletView {
-  constructor(wallet) {
-    this.wallet = wallet;
+  constructor() {
     this.walletContainer = document.getElementById("wallet-container");
+    this.renderWalletlBtn = document.getElementById("render-wallet-btn");
+    this.setUpEventLister();
+    this.sendCoinsBtn = document.getElementById("send-coins-btn");
+    this.setUpEventListerSendCoins(); 
   }
 
-  renderWallet() {
-    const walletData = this.wallet.getWallet();
+  setUpEventListerSendCoins(){
+    this.sendCoinsBtn.addEventListener("click", ()=> {
+      console.log("Send Coins clicked");
+      this.renderSendCoins()
+    }) 
+  }
 
-    const { name, publicKey, balance } = walletData;
+  setUpEventLister() {
+    this.renderWalletlBtn.addEventListener("click", () => {
+      console.log("Wallet btc Clicked");
+      this.renderWallet();
+    });
+  }
 
-    const newWalletDiv = document.createElement("div");
-    newWalletDiv.classList.add("wallet");
+  onRenderSendCoins(callback){
+    this.renderSendCoins = callback;
+  }
 
-    newWalletDiv.innerHTML = `
+  onRenderWallet(callback) {
+    this.renderWallet = callback;
+  }
+
+  render(walletData) {
+    let walletHTML = `
             <ul class="block">
                 <h3>Wallet</h3>
-                <li>Name: ${name}</li>
-                <li>PublicKey: ${publicKey}</li>
-                <li>Balance: ${balance}</li>
-            </ul>`;
+                <li>Name: ${walletData.name}</li>
+                <li>PublicKey: ${walletData.publicKey}</li>
+                <li>Balance: ${walletData.balance}</li>
+            </ul>
+      `;
 
-    this.walletContainer.appendChild(newWalletDiv);
+    this.walletContainer.innerHTML = walletHTML;
   }
 }
 

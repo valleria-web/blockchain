@@ -26,7 +26,7 @@ class Wallet {
     return this.balance; 
   }
 
-  sendFounds(amount, recipientPublicKey) {
+  sendCoins(amount, recipientPublicKey) {
     if (this.balance < amount) {
       console.log("Insufficient funds");
       return;

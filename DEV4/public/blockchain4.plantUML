@@ -1,4 +1,4 @@
-@startuml
+@startuml 4
 
 !define Blockchain Blockchain
 !define Miner Miner
@@ -8,13 +8,7 @@
 !define Coin Coin
 !define Transaction Transaction
 !define App App
-!define BlockchainView BlockchainView
-!define CoinView CoinView
-!define MempoolView MempoolView
-!define MinerView MinerView
-!define TransactionView TransactionView
-!define WalletView WalletView
-!define BlockchainController BlockchainController
+
 
 package "Modelos" {
   class Blockchain {
@@ -118,17 +112,21 @@ package "Vistas" {
     +renderBlockchain() : void
   }
 
+  BlockchainView o-- Blockchain
+
   class CoinView {
     -coin : Coin
     -coinContainer : HTMLElement
     +renderCoin() : void
   }
 
+
   class MempoolView {
     -transactions : List<Transaction>
     -mempoolContainer : HTMLElement
     +renderMempool() : void
   }
+
 
   class MinerView {
     -miner : Miner
@@ -157,18 +155,15 @@ package "Controladores" {
     -mempool : Mempool
     -wallet : Wallet
     -miner : Miner
-    -intervalId : any
-    -eventManager : EventManager
-    +startMining() : void
-    +mineBlockAtInterval() : void
-    +stopMining() : void
-    +registerView(view : Observer) : void
   }
+ 
 
-  App o-- Blockchain: aggregation
-  App o-- Mempool: aggregation
+  App o-- Coin: aggregation
   App o-- Wallet: aggregation
   App o-- Miner: aggregation
+  App o-- Mempool: aggregation
+  App o-- Blockchain: aggregation
+  App o-- Transactions: aggregation
 
 
   class BlockchainController {
@@ -177,16 +172,31 @@ package "Controladores" {
     +renderBlockchain() : void
   }
 
-    class CoinController{
-    -blockchain : Blockchain 
+  BlockchainController o-- BlockchainView
+BlockchainController o-- Blockchain
+
+  class CoinController{
+    -blockchain : Blockchain
     -coinView : CoinView
     +renderCoin(): void
   }
 
   class MinerController{
-    -miner : Miner 
+    -miner : Miner
     -minerView : MinerView
     +mineBlock(): void
+  }
+
+  class MempoolController{
+    -mempool : Mempool
+    -mempoolView : MempoolView
+    +renderMempool(): void
+  }
+
+  class WalletController{
+    -wallet : Wallet
+    -walletView : WalletView
+    +renderWallet(): void
   }
 
   BlockchainController o-- Blockchain
@@ -195,6 +205,10 @@ package "Controladores" {
   CoinController o-- CoinView
   MinerController o-- Miner
   MinerController o-- MinerView
+  MempoolController o-- Mempool
+  MempoolController o-- MempoolView
+  WalletController  o--Wallet
+  WalletController  o--WalletView
 }
 
 @enduml

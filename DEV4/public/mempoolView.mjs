@@ -7,7 +7,7 @@ class MempoolView {
 
   setupEventLister() {
     this.renderMempoolBtn.addEventListener("click", () => {
-      console.log("Click");
+      console.log("Mempool Btn Clicked");
       this.renderMempool();
     });
   }
@@ -16,11 +16,10 @@ class MempoolView {
     this.renderMempool = callback;
   }
 
-  render(transaction) {
-
+  render(mempoolData) {
     let mempoolHTML = "";
 
-    transaction.forEach((transaction) => {
+    mempoolData.forEach((transaction) => {
       mempoolHTML += `
         <ul class="block">
           <li>Transaction Id: ${transaction.transactionId}</li>

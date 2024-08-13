@@ -7,7 +7,7 @@ class CoinView {
 
   setupEventListener() {
     this.renderCoinBtn.addEventListener("click", () => {
-      console.log("Click");
+      console.log("Coin btn Clicked");
       this.renderCoin();
     });
   }
