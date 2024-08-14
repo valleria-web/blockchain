@@ -1,0 +1,45 @@
+
+
+1. Blocks Table
+Fields:
+block_id: A unique identifier for each block (primary key).
+index: The position of the block in the blockchain.
+timestamp: The time when the block was created.
+nonce: A number used in the proof-of-work algorithm.
+hash: The unique hash of the block.
+previous_block_hash: The hash of the previous block.
+transactions: A reference to the transactions included in this block (could be a foreign key or a separate table for many-to-many relationships).
+2. Transactions Table
+Fields:
+transaction_id: A unique identifier for each transaction (primary key).
+block_id: A foreign key linking the transaction to the block it belongs to.
+coin_amount: The amount of cryptocurrency being transferred.
+sender_public_key: The public key of the sender.
+recipient_public_key: The public key of the recipient.
+is_confirmed: A boolean indicating if the transaction has been confirmed.
+timestamp: The time when the transaction was created.
+3. Coins Table
+Fields:
+coin_id: A unique identifier for the coin (primary key).
+name: The name of the cryptocurrency.
+ticker: The symbol or short identifier for the coin (e.g., BTC).
+initial_supply: The initial supply of the coin.
+actual_supply: The current circulating supply of the coin.
+total_supply: The total supply of the coin, including yet-to-be-mined coins.
+4. Wallets Table
+Fields:
+wallet_id: A unique identifier for each wallet (primary key).
+public_key: The public key associated with the wallet.
+balance: The current balance of the wallet.
+associated_blockchain: (Optional) A foreign key if the wallet is linked to a specific blockchain.
+5. Mempool Table
+Fields:
+mempool_id: A unique identifier for the mempool (primary key).
+transaction_id: A foreign key linking to transactions that are pending and have not yet been confirmed.
+timestamp: The time when the transaction was added to the mempool.
+6. Block-Transaction Mapping Table (If needed)
+This table would be necessary if a block can have multiple transactions and a transaction can belong to multiple blocks, though this is less common in most blockchain implementations.
+Fields:
+block_id: A foreign key linking to the block.
+transaction_id: A foreign key linking to the transaction.
+These tables provide a relational structure to store and manage the data related to your blockchain project. They allow you to track the entire blockchain, the individual transactions, the balances of wallets, and the status of pending transactions.
