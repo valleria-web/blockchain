@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blockchain Viewer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Blockchain Viewer</h1>
+
+    <div>
+      <div>
+      <div id="wallets-container"></div>
+      <button id="render-wallet-btn">Render Wallet</button>
+    </div>
+    
+    <div id="send-coins-container">
+      <form id="send-coins-form">
+        <input type="text" id="amount" placeholder="Amount" />
+        <input type="text" id="recipient" placeholder="Recipient Public Key" />
+        <button id="send-coins-btn">Send Coins</button>
+      </form>
+    </div>
+    
+
+
+    <div>
+      <button id="render-coin-btn">Render Coin</button>
+      <div id="coin-container"></div>
+    </div>
+
+    <div>
+      <button id="mineBlockBtn">Mine Block</button>
+    </div>
+
+    <div>
+      <button id="render-mempool-btn">Render Mempool</button>
+      <div id="mempool-container"></div>
+    </div>
+
+    <div>
+      <button id="render-blockchain-btn">Render Blockchain</button>
+      <div id="blockchain-container"></div>
+    </div>
+
+    <script type="module" src="app.mjs"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  </body>
+</html>

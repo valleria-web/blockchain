@@ -1,0 +1,33 @@
+.block {
+  border: 1px solid #000;
+  padding: 10px;
+  margin: 10px;
+  background-color: #f9f9f9;
+}
+
+.block li {
+  list-style: none;
+}
+
+#blockchain-container {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+
+/* styles.css */
+
+#wallets-container {
+  display: flex;
+  flex-direction: column; /* Alinea los elementos verticalmente */
+  gap: 10px; /* Espacio entre los elementos */
+}
+
+.wallet-block {
+  border: 1px solid #ddd; /* Borde opcional para mejor visibilidad */
+  padding: 10px; /* Espaciado interno */
+  background-color: #f9f9f9; /* Color de fondo opcional */
+}
+
+
+
