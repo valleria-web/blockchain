@@ -1,6 +1,6 @@
 class WalletView {
   constructor() {
-    this.walletContainer = document.getElementById("wallet-container");
+    this.walletsContainer = document.getElementById("wallets-container");
     this.renderWalletlBtn = document.getElementById("render-wallet-btn");
     this.setUpEventLister();
   }
@@ -17,17 +17,24 @@ class WalletView {
   }
 
   render(walletData) {
-    let walletHTML = `
-            <ul class="block">
-                <h3>Wallet</h3>
-                <li>Name: ${walletData.name}</li>
-                <li>PublicKey: ${walletData.publicKey}</li>
-                <li>Balance: ${walletData.balance}</li>
-            </ul>
+    walletData.forEach((data) => {
+      let walletDiv = document.createElement('div');
+      walletDiv.classList.add('wallet-block');
+
+      let walletHTML = `
+        <ul class="block">
+          <h3>Wallet</h3>
+          <li>Name: ${data.name}</li>
+          <li>PublicKey: ${data.publicKey}</li>
+          <li>Balance: ${data.balance}</li>
+        </ul>
       `;
 
-    this.walletContainer.innerHTML = walletHTML;
+      walletDiv.innerHTML = walletHTML;
+      this.walletsContainer.appendChild(walletDiv); 
+    });
   }
 }
+
 
 export default WalletView;

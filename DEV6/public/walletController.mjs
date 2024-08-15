@@ -6,7 +6,7 @@ class WalletController {
   }
 
   renderWallet() {
-    const walletData = this.wallet.getWallet();
+    const walletData = [this.wallet.getWallet()];
     console.log("Wallet Data:", walletData);
     this.walletView.render(walletData);
   }

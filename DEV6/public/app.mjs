@@ -36,6 +36,8 @@ class App {
     const mempoolView = new MempoolView();
     const mempoolController = new MempoolController(mempool, mempoolView);
 
+    
+
     const walletMiner = new Wallet("minerWaller", mempool, blockchain);
     const walletView = new WalletView();
     const walletController = new WalletController(walletMiner, walletView);

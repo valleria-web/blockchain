@@ -17,11 +17,6 @@ class BlockchainView {
   }
 
   render(chain) {
-    /*if (!Array.isArray(chain)) {
-      console.error("Invalid blockchain data:", chain);
-      return;
-    }*/
-
     let blockchainHTML = "";
 
     chain.forEach((block) => {
