@@ -8,18 +8,27 @@ class WalletView {
   setUpEventLister() {
     this.renderWalletlBtn.addEventListener("click", () => {
       console.log("Wallet btc Clicked");
-      this.renderWallet();
+      if (this.renderWalletCallback) {
+        this.renderWalletCallback();
+      }
     });
   }
 
   onRenderWallet(callback) {
-    this.renderWallet = callback;
+    this.renderWalletCallback = callback;
   }
 
-  render(walletData) {
-    walletData.forEach((data) => {
-      let walletDiv = document.createElement('div');
-      walletDiv.classList.add('wallet-block');
+  render(allWalletsData) {
+    this.walletsContainer.innerHTML = "";
+
+    if (!Array.isArray(allWalletsData)) {
+      allWalletsData = [allWalletsData];
+    }
+
+    allWalletsData.forEach((data, index) => {
+      console.log("Rendering wallet at index:", index, data);
+      let walletDiv = document.createElement("div");
+      walletDiv.classList.add("wallet-block");
 
       let walletHTML = `
         <ul class="block">
@@ -31,10 +40,9 @@ class WalletView {
       `;
 
       walletDiv.innerHTML = walletHTML;
-      this.walletsContainer.appendChild(walletDiv); 
+      this.walletsContainer.appendChild(walletDiv);
     });
   }
 }
-
 
 export default WalletView;

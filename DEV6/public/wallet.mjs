@@ -2,6 +2,8 @@ import Transaction from './transaction.mjs';
 
 
 class Wallet {
+  static allWallets = []; 
+
   constructor(name = "", mempool, blockchain, publicKey = null, balance = 0) {
     this.name = name;
     this.mempool = mempool;
@@ -9,6 +11,8 @@ class Wallet {
     this.publicKey = publicKey || this.generateRandomPublicKey();
     this.balance = balance;
     this.updateBalance();
+
+    Wallet.allWallets.push(this); 
   }
 
   generateRandomPublicKey(length = 16) {
@@ -24,10 +28,14 @@ class Wallet {
   getWallet() {
     this.updateBalance();
     return {
-      name: this.name,
-      publicKey: this.publicKey,
-      balance: this.balance,
+      name : this.name,
+      publicKey : this.publicKey,
+      balance : this.balance,
     };
+  }
+
+  static getAllWallets() {
+    return Wallet.allWallets.map(wallet => wallet.getWallet());
   }
 
   getBalance() {

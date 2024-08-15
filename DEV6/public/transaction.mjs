@@ -7,7 +7,6 @@ class Transaction {
     this.isConfirmed = false;
   }
 
-  // Método para generar un ID aleatorio
   generateRandomId(length = 8) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';

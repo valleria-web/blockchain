@@ -1,3 +1,5 @@
+import Wallet from "./wallet.mjs";
+
 class WalletController {
   constructor(wallet, walletView) {
     this.wallet = wallet;
@@ -6,9 +8,9 @@ class WalletController {
   }
 
   renderWallet() {
-    const walletData = [this.wallet.getWallet()];
-    console.log("Wallet Data:", walletData);
-    this.walletView.render(walletData);
+    const allWalletsData = Wallet.getAllWallets();
+    console.log(allWalletsData);
+    this.walletView.render(allWalletsData);
   }
 }
 
