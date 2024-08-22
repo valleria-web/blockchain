@@ -7,7 +7,6 @@ package "App"{
     -mempool : Mempool
     -wallet : Wallet
     -miner : Miner
-
   }
 
   package "Modelos" {
@@ -115,6 +114,11 @@ package "App"{
     CoinController o-- Coin
 
 
+    class CoinDBController{
+      -blockchain : Blockchain
+      +async saveCoinToDB()
+    }
+
     class MinerController{
       -miner : Miner
       -minerView : MinerView
@@ -189,30 +193,49 @@ package "App"{
     WalletSendCoinsView --o WalletSendCoinsController
   }
 
-  package "DAL Data Access Layer" {
-    class TransactionSchema {
-      -transactionId : String
-      -coinAmount : int
-      -senderPublicKey : String
-      -recipientPublicKey : String
-      -isConfirmed : boolean
-      +createTransaction(amount : int, sender : String, recipient : String) : Transaction
-      +getAllTransactions()
-    }
-
-    class TransactionSchemaController{
-      +new TransactionModel() :void;
-    }
-    TransactionSchemaController o-- TransactionSchema
-
-    class DALConnect{
-      +transactionModel = new TransactionModel();
-      +transactionController = new TransactionSchemaController(transactionModel);
-    }
-    DALConnect --o TransactionSchemaController
   }
 
+  package "DAL Data Access Layer" {
 
+    class connectDB{}
+
+    package "Models" {
+      class CoinSchema{
+        -CoinSchema : new mongoose.Schema
+      }
+    }
+
+    package "Controllers" {
+      class CoinControllerDBgetCoin{
+        + response : fetchAPI
+      }
+      CoinControllerDBgetCoin o--CoinViewDBrenderCoin
+      CoinControllerDBgetCoin o-- Blockchain
+    }
+
+
+    package "Views/API" {
+      class coinAPI{
+        + endpoint : app.get(RenderCoins)
+      }
+      coinAPI -- CoinSchema
+      coinAPI --  CoinControllerDBgetCoin
+
+
+      class CoinViewDBrenderCoin{
+        + renderCoinBtn : HTML
+        +render(coinData)
+      }
+      CoinViewDBrenderCoin -- CoinControllerDBgetCoin
+
+    }
+
+    class appApi {
+      -app.get : '/RenderCoin'
+    }
+
+
+  
 }
 
 @enduml

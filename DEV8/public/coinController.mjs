@@ -6,7 +6,7 @@ class CoinController {
     this.coinView.onRenderCoin(() => this.getCoin());
   }
 
-  getCoin(){
+  getCoin() {
     const coinData = this.coin.getCoin();
     console.log("Coin data:", coinData);
     this.coinView.render(coinData);

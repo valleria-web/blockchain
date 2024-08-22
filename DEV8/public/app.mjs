@@ -1,6 +1,4 @@
 
-// Al hacer sendCoin, se envia la coin y el receptor la anade al final de su array de balance, debe sumarlo y no anadirlo {name: 'GenesisWallet', publicKey: 'dfg9IHniR8Ycmc4c', balance: '01'} envio de una moneda fue interretado como 0+1 u resultadio 01
-
 import Blockchain from "./blockchain.mjs";
 import Mempool from "./mempool.mjs";
 import Wallet from "./wallet.mjs";
@@ -57,9 +55,7 @@ class App {
       "Miner1",
       blockchain,
       mempool,
-      walletMiner,
-      CryptoJS
-    );
+      walletMiner);
     const minerView = new MinerView();
     const minerController = new MinerController(miner, minerView);
 

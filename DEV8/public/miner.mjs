@@ -1,6 +1,7 @@
 import Transaction from "./transaction.mjs";
 import Block from "./block.mjs";
 
+
 class Miner {
   constructor(minerId, blockchain, mempool, wallet, CryptoJS) {
     this.minerId = minerId;
