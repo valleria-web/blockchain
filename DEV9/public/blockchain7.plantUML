@@ -1,0 +1,242 @@
+@startuml 6
+
+package "App"{
+
+  class App {
+    -blockchain : Blockchain
+    -mempool : Mempool
+    -wallet : Wallet
+    -miner : Miner
+  }
+
+  package "Modelos" {
+    class Blockchain {
+      -coin : Coin
+      -chain : List<Block>
+      -genesisWallet : Wallet
+      -mempool : Mempool
+      +createGenesisBlock() : void
+      +confirmTransactions(transactions : List<Transaction>) : void
+      +addBlock(block : Block) : void
+      +validateBlock(block : Block) : boolean
+      +getLastBlock() : Block
+      +getBlockchain() : List<Block>
+      +viewTransactions() : void
+    }
+    Blockchain o-- Coin
+    Blockchain o-- Wallet
+    Blockchain o-- Mempool
+    Blockchain o-- Block
+
+    class Miner {
+      -minerId : String
+      -blockchain : Blockchain
+      -mempool : Mempool
+      -wallet : Wallet
+      -CryptoJS : CryptoJS
+      +hashBlock(previousBlockHash : String, nonce : int) : String
+      +proofOfWork(previousBlockHash : String) : int
+      +mineBlock() : Block
+      +confirmTransactions(transactions : List<Transaction>) : void
+      +isValidHash(blockHash : String) : boolean
+    }
+    Miner o-- "1" Blockchain
+    Miner o-- "1" Mempool
+    Miner o-- "1" Wallet
+    Miner o-- Block
+
+    class Mempool {
+      -pendingTransactions : List<Transaction>
+      +addTransaction(transaction : Transaction) : void
+      +removeConfirmedTransactions() : void
+      +getPendingTransactions() : List<Transaction>
+    }
+
+    class Wallet {
+      -publicKey : String
+      -balance : int
+      -mempool : Mempool
+      -blockchain : Blockchain
+      +getAllWallets() : int
+      +sendCoins() : int
+    }
+    Wallet o-- Mempool
+    Wallet o-- Blockchain
+
+    class Block {
+      -index : int
+      -timestamp : int
+      -nonce : int
+      -hash : String
+      -previousBlockHash : String
+      -transactions : List<Transaction>
+      +createBlock(index : int, nonce : int, hash : String, previousBlockHash : String, transactions : List<Transaction>) : Block
+      +addTransaction(transaction : Transaction) : void
+      +getTransactions() : List<Transaction>
+    }
+
+    class Coin {
+      -name : String
+      -ticker : String
+      -initialSupply : int
+      -actualSupply : int
+      -totalSupply : int
+      +mintCoinbase() : int
+      +getCoin() : Map
+      +getActualSupply() : int
+      +getTotalSupply() : int
+    }
+
+    class Transaction {
+      -transactionId : String
+      -coinAmount : int
+      -senderPublicKey : String
+      -recipientPublicKey : String
+      -isConfirmed : boolean
+      +createTransaction(amount : int, sender : String, recipient : String) : Transaction
+    }
+    Transaction o-- Wallet
+  }
+
+  package "Controladores" {
+    class BlockchainController {
+      -blockchain : Blockchain
+      -blockchainView : BlockchainView
+      +renderBlockchain() : void
+    }
+    BlockchainController o-- Blockchain
+
+    class CoinController{
+      -blockchain : Blockchain
+      -coinView : CoinView
+      +getCoin(): void
+    }
+    CoinController o-- Coin
+
+
+    class CoinDBController{
+      -blockchain : Blockchain
+      +async saveCoinToDB()
+    }
+
+    class MinerController{
+      -miner : Miner
+      -minerView : MinerView
+      +mineBlock(): void
+    }
+    MinerController o-- Miner
+
+    class MempoolController{
+      -mempool : Mempool
+      -mempoolView : MempoolView
+      +renderMempool(): void
+    }
+    MempoolController o-- Mempool
+
+    class WalletGetAllWalletsController{
+      -wallet : Wallet
+      -walletView : WalletView
+      +getAllWallets(): void
+    }
+    WalletGetAllWalletsController o-- Wallet
+
+    class WalletSendCoinsController{
+      -wallet : Wallet
+      -walletView : WalletSendCoinsView
+      +sendCoins(): void
+    }
+    WalletSendCoinsController o-- Wallet
+  }
+
+  package "Vistas" {
+    class BlockchainView {
+      -blockchainContainer : HTMLElement
+      -renderBlockchainBtn : HTMLElement
+      +onRenderBlockchain() : void
+    }
+    BlockchainView --o BlockchainController
+
+    class CoinView {
+      -coinContainer : HTMLElement
+      -renderCoinBtn : HTMLElement
+      +onRenderCoin() : void
+    }
+    CoinView --o CoinController
+
+
+    class MempoolView {
+      -mempoolContainer : HTMLElement
+      -renderMempoolBtn : HTMLElement
+      +onRenderMempool() : void
+    }
+    MempoolView --o MempoolController
+
+
+    class MinerView {
+      -mineBlockBtn : HTMLElement
+      +onMineBlock() : void
+    }
+    MinerView --o MinerController
+
+    class WalletGetAllWalletsView {
+      -walletContainer : HTMLElement
+      -renderWalletlBtn : HTMLElement
+      +onRenderWallets() : void
+    }
+    WalletGetAllWalletsView --o WalletGetAllWalletsController
+
+    class WalletSendCoinsView{
+      -walletContainer : HTMLElement
+      -renderWalletlBtn : HTMLElement
+      +onRenderSendCoins() : void
+    }
+    WalletSendCoinsView --o WalletSendCoinsController
+  }
+
+  }
+
+  package "DAL Data Access Layer" {
+
+    class connectDB{}
+
+    package "Models" {
+      class CoinSchema{
+        -CoinSchema : new mongoose.Schema
+      }
+    }
+
+    package "Controllers" {
+      class CoinControllerDBgetCoin{
+        + response : fetchAPI
+      }
+      CoinControllerDBgetCoin o--CoinViewDBrenderCoin
+      CoinControllerDBgetCoin o-- Blockchain
+    }
+
+
+    package "Views/API" {
+      class coinAPI{
+        + endpoint : app.get(RenderCoins)
+      }
+      coinAPI -- CoinSchema
+      coinAPI --  CoinControllerDBgetCoin
+
+
+      class CoinViewDBrenderCoin{
+        + renderCoinBtn : HTML
+        +render(coinData)
+      }
+      CoinViewDBrenderCoin -- CoinControllerDBgetCoin
+
+    }
+
+    class appApi {
+      -app.get : '/RenderCoin'
+    }
+
+
+  
+}
+
+@enduml
+

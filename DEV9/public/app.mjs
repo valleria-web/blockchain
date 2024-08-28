@@ -1,6 +1,4 @@
 
-// SendForm console.log funciona, pero no cambia balance en las wallets
-
 import Blockchain from "./blockchain.mjs";
 import Mempool from "./mempool.mjs";
 import Wallet from "./wallet.mjs";
@@ -19,8 +17,8 @@ import BlockchainController from "./blockchainController.mjs";
 import MinerController from "./minerController.mjs";
 import CoinController from "./coinController.mjs";
 import MempoolController from "./mempoolController.mjs";
-import WalletController from "./walletController.mjs";
-import WalletSendCoinsController from "./walletSendCoinsController.js";
+import WalletGetAllWalletsController from "./WalletGetAllWalletsController.mjs";
+import WalletSendCoinsController from "./walletSendCoinsController.mjs";
 
 class App {
   constructor() {}
@@ -39,27 +37,25 @@ class App {
 
     
 
-    const walletMiner = new Wallet("minerWaller", mempool, blockchain);
+    const walletMiner = new Wallet("myWallet", mempool, blockchain);
     const walletView = new WalletView();
-    const walletController = new WalletController(walletMiner, walletView);
+    const walletController = new WalletGetAllWalletsController(walletMiner, walletView);
 
     const walletViewGenesis = new WalletView();
-    const walletControllerGenesis = new WalletController(
+    const walletControllerGenesis = new WalletGetAllWalletsController(
       blockchain.genesisWallet,
       walletViewGenesis
     );
 
     const wallet2 = new Wallet("wallet2", mempool, blockchain);
     const wallet2View = new WalletView();
-    const wallet2Controller = new WalletController(wallet2, wallet2View)
+    const wallet2Controller = new WalletGetAllWalletsController(wallet2, wallet2View)
 
     const miner = new Miner(
       "Miner1",
       blockchain,
       mempool,
-      walletMiner,
-      CryptoJS
-    );
+      walletMiner);
     const minerView = new MinerView();
     const minerController = new MinerController(miner, minerView);
 
